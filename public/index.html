@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d3a2c">
+<meta name="description" content="Sett Valley Quiz League: league table, fixtures, results and who is setting the questions each week.">
+<title>Sett Valley Quiz League</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d3a2c'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%23f2c14e'%3E%3F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: one column; valley-green header with tabs, Home shows next game, last results and the table. */
+:root {
+  --bg: #f5f2ea;
+  --surface: #ffffff;
+  --ink: #1b2420;
+  --muted: #56615b;
+  --line: #e0dccf;
+  --head: #1d3a2c;      /* valley green */
+  --head-ink: #f6f1e3;
+  --accent: #c8901a;    /* ochre */
+  --accent-soft: #fbf0d6;
+  --win: #2f7a46;
+  --btn: #1d3a2c;
+  --btn-ink: #f6f1e3;
+  --loss: #a8402f;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111613; --surface: #19201c; --ink: #e9ece6; --muted: #a9b3ac; --line: #2b3530;
+  --head: #0e1d16; --head-ink: #f6f1e3; --accent: #f2c14e; --accent-soft: #2c2716; --win: #6cc58a; --loss: #ee8a7a; --btn: #f2c14e; --btn-ink: #14231b;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111613; --surface: #19201c; --ink: #e9ece6; --muted: #a9b3ac; --line: #2b3530;
+  --head: #0e1d16; --head-ink: #f6f1e3; --accent: #f2c14e; --accent-soft: #2c2716; --win: #6cc58a; --loss: #ee8a7a; --btn: #f2c14e; --btn-ink: #14231b;
+  color-scheme: dark }
+
+* { box-sizing: border-box }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100% }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 1rem; line-height: 1.5 }
+[hidden] { display: none !important }
+.wrap { max-width: 920px; margin: 0 auto; padding-inline: 16px }
+header.top { background: var(--head); color: var(--head-ink); position: sticky; top: 0; z-index: 5 }
+header.top .wrap { padding-top: 14px; display: grid; gap: 8px }
+.brand { display: flex; align-items: center; gap: 12px }
+.brand .mark { width: 44px; height: 44px; flex: none; border-radius: 10px; background: var(--accent); color: #1d3a2c; display: grid; place-items: center; font: 800 1.8rem/1 var(--font-display) }
+.brand h1 { font: 800 1.6rem/1.1 var(--font-display); margin: 0; letter-spacing: .005em }
+.brand .season { font-size: .82rem; opacity: .8; letter-spacing: .06em; text-transform: uppercase }
+nav.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-inline: -8px }
+nav.tabs a { color: inherit; text-decoration: none; font-weight: 600; padding: 8px 10px 10px; border-bottom: 3px solid transparent; white-space: nowrap; opacity: .82 }
+nav.tabs a[aria-current="page"] { opacity: 1; border-bottom-color: var(--accent) }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+main { padding-block: 20px 48px }
+section.view { display: grid; gap: 18px }
+h2 { font: 600 1.35rem/1.2 var(--font-display); margin: 0 }
+h3 { font: 600 1.1rem/1.3 var(--font-display); margin: 0 }
+.muted { color: var(--muted) }
+.card-head a { color: var(--accent); font-weight: 600 }
+.small { font-size: .88rem }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px }
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 14px; flex-wrap: wrap }
+.pill { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+.setter { display: flex; align-items: center; gap: 8px; background: var(--accent-soft); border-radius: 8px; padding: 8px 12px; font-size: .95rem }
+.setter b { font-weight: 700 }
+.grid2 { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)) }
+.notice { padding: 12px 14px; border-left: 4px solid var(--accent); background: var(--surface); border-radius: 6px }
+.error { border-left-color: var(--loss) }
+
+/* Match rows */
+.matches { list-style: none; margin: 0; padding: 0; display: grid }
+.matches li { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line) }
+.matches li:first-child { border-top: 0 }
+.matches .home { text-align: right }
+.matches .score { font: 600 1.05rem var(--font-display); font-variant-numeric: tabular-nums; min-width: 4.6em; text-align: center; padding: 2px 8px; border-radius: 6px; background: var(--bg) }
+.matches .score.vs { font-family: var(--font-body); font-weight: 400; color: var(--muted); background: none }
+.matches .won { font-weight: 700 }
+.hl { background: var(--accent-soft); border-radius: 4px; padding-inline: 4px; margin-inline: -4px }
+
+/* League table */
+.table-wrap { overflow-x: auto; margin-inline: -16px; padding-inline: 16px }
+table.league { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums }
+table.league th, table.league td { padding: 8px 6px; text-align: center; border-bottom: 1px solid var(--line) }
+table.league th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700 }
+table.league td.team, table.league th.team { text-align: left; width: 100% }
+table.league td.team { font-weight: 600 }
+table.league td.pts { font-weight: 700; font-size: 1.05rem }
+.form { display: inline-flex; gap: 3px }
+.form span { width: 18px; height: 18px; border-radius: 4px; font-size: .7rem; font-weight: 700; display: grid; place-items: center; color: #fff }
+.form .W { background: var(--win) } .form .D { background: #8a8f8b } .form .L { background: var(--loss) }
+@media (max-width: 560px) { .wide { display: none } }
+
+/* Fixtures */
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
+select, input[type="number"], input[type="text"] { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-height: 42px }
+.week { scroll-margin-top: 130px }
+.week.next { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) }
+.week.off { opacity: .9 }
+.btn { font: 700 1rem var(--font-body); border: 0; border-radius: 8px; padding: 10px 16px; min-height: 44px; cursor: pointer; background: var(--btn); color: var(--btn-ink) }
+.btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line) }
+.btn[disabled] { opacity: .6; cursor: progress }
+
+/* Send score */
+form.send { display: grid; gap: 16px }
+.field { display: grid; gap: 6px }
+.field label, .field .label { font-weight: 600 }
+.scores { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.scores input { width: 100%; font: 700 1.6rem var(--font-display); text-align: center }
+.choice { display: flex; gap: 8px; flex-wrap: wrap }
+.choice label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; background: var(--surface); cursor: pointer; font-weight: 400 }
+.choice input { accent-color: var(--head) }
+.done { border-left-color: var(--win) }
+footer { text-align: center; color: var(--muted); font-size: .85rem; padding-bottom: 28px }
+footer a { color: inherit }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">?</div>
+      <div>
+        <h1>Sett Valley Quiz League</h1>
+        <div class="season" id="season">Pub quiz league · Sett Valley, Derbyshire</div>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#home">Home</a>
+      <a href="#table">Table</a>
+      <a href="#fixtures">Fixtures &amp; results</a>
+      <a href="#send">Send score</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="status" class="notice" role="status">Loading the league…</div>
+
+  <section class="view" id="view-home" hidden>
+    <div class="grid2">
+      <article class="card" id="next-card"></article>
+      <article class="card" id="last-card"></article>
+    </div>
+    <article class="card">
+      <div class="card-head"><h2>League table</h2><a href="#table" class="small">Full table</a></div>
+      <div class="table-wrap" id="home-table"></div>
+    </article>
+  </section>
+
+  <section class="view" id="view-table" hidden>
+    <article class="card">
+      <div class="card-head"><h2>League table</h2><span class="small muted">2 points for a win, 1 for a draw</span></div>
+      <div class="table-wrap" id="full-table"></div>
+      <p class="small muted" style="margin:0">Teams level on points are split by quiz points scored (For).</p>
+    </article>
+  </section>
+
+  <section class="view" id="view-fixtures" hidden>
+    <div class="toolbar">
+      <label for="team-filter" class="small muted">Show</label>
+      <select id="team-filter"><option value="">All teams</option></select>
+      <button class="btn ghost" id="jump-next" type="button">Jump to next week</button>
+    </div>
+    <div id="weeks" style="display:grid;gap:14px"></div>
+  </section>
+
+  <section class="view" id="view-send" hidden>
+    <article class="card">
+      <h2>Send the score</h2>
+      <p class="muted" style="margin:0">For the home team at the end of the night. The score goes straight into the league sheet and the table updates.</p>
+      <form class="send" id="send-form" novalidate>
+        <div class="field">
+          <label for="send-week">Week</label>
+          <select id="send-week"></select>
+        </div>
+        <div class="field">
+          <label for="send-match">Match</label>
+          <select id="send-match"></select>
+        </div>
+        <div class="field">
+          <span class="label">Final score</span>
+          <div class="scores">
+            <div class="field"><label for="home-score" id="home-label">Home</label><input id="home-score" type="number" inputmode="numeric" min="0" max="60" step="1" required></div>
+            <div class="field"><label for="away-score" id="away-label">Away</label><input id="away-score" type="number" inputmode="numeric" min="0" max="60" step="1" required></div>
+          </div>
+        </div>
+        <div class="field">
+          <span class="label" id="first-label">Which team went first?</span>
+          <div class="choice" role="radiogroup" aria-labelledby="first-label">
+            <label><input type="radio" name="first" value="Home"> <span id="first-home">Home</span></label>
+            <label><input type="radio" name="first" value="Away"> <span id="first-away">Away</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="code">Team code</label>
+          <input id="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="6 letters and numbers">
+          <span class="small muted">Your captain has it. This phone remembers it once it’s worked.</span>
+        </div>
+        <div id="send-msg" class="notice" hidden></div>
+        <div><button class="btn" type="submit" id="send-btn">Send score</button></div>
+      </form>
+    </article>
+  </section>
+</main>
+
+<footer class="wrap">Results come live from the league spreadsheet. <span id="updated"></span></footer>
+
+<script>
+let league = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const store = {
+  get(k) { try { return localStorage.getItem(k) } catch { return null } },
+  set(k, v) { try { localStorage.setItem(k, v) } catch {} },
+};
+
+const dayFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+const longFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+const day = iso => dayFmt.format(new Date(iso + 'T12:00:00Z'));
+const longDay = iso => longFmt.format(new Date(iso + 'T12:00:00Z'));
+const todayIso = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
+
+async function load(fresh) {
+  try {
+    const res = await fetch('/api/league' + (fresh ? '?fresh=1' : ''));
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'The league sheet could not be read.');
+    league = data;
+    $('status').hidden = true;
+    render();
+  } catch (err) {
+    $('status').hidden = false;
+    $('status').className = 'notice error';
+    $('status').textContent = err.message + ' Please try again shortly.';
+  }
+}
+
+const weekOf = n => league.weeks.find(w => w.week === n);
+
+function matchRows(matches, team) {
+  return '<ul class="matches">' + matches.map(m => {
+    const hw = m.played && m.homeScore > m.awayScore, aw = m.played && m.awayScore > m.homeScore;
+    const mark = name => team && name === team ? ' hl' : '';
+    const score = m.played
+      ? `<span class="score" aria-label="${m.homeScore} to ${m.awayScore}">${m.homeScore} – ${m.awayScore}</span>`
+      : '<span class="score vs">v</span>';
+    return `<li><span class="home${hw ? ' won' : ''}"><span class="${mark(m.home)}">${esc(m.home)}</span></span>${score}<span class="away${aw ? ' won' : ''}"><span class="${mark(m.away)}">${esc(m.away)}</span></span></li>`;
+  }).join('') + '</ul>';
+}
+
+const setterLine = w => w.setter ? `<div class="setter"><span aria-hidden="true">✎</span><span>Questions set by <b>${esc(w.setter)}</b></span></div>` : '';
+
+function tableHtml(rows, compact) {
+  const head = `<tr><th>#</th><th class="team">Team</th><th>P</th><th class="${compact ? 'wide' : ''}">W</th><th class="${compact ? 'wide' : ''}">D</th><th class="${compact ? 'wide' : ''}">L</th><th>For</th><th class="wide">Ag</th>${compact ? '' : '<th class="wide">Form</th>'}<th>Pts</th></tr>`;
+  const body = rows.map(r => `<tr><td>${r.pos}</td><td class="team">${esc(r.team)}</td><td>${r.played}</td><td class="${compact ? 'wide' : ''}">${r.won}</td><td class="${compact ? 'wide' : ''}">${r.drawn}</td><td class="${compact ? 'wide' : ''}">${r.lost}</td><td>${r.for}</td><td class="wide">${r.against}</td>${compact ? '' : `<td class="wide"><span class="form">${r.form.map(f => `<span class="${f}" title="${{ W: 'Won', D: 'Drew', L: 'Lost' }[f]}">${f}</span>`).join('')}</span></td>`}<td class="pts">${r.points}</td></tr>`).join('');
+  return `<table class="league"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+}
+
+function render() {
+  $('season').textContent = `Season ${league.season} · ${league.teams.length} teams`;
+  const next = weekOf(league.nextWeek), last = weekOf(league.lastWeek);
+
+  $('next-card').innerHTML = next
+    ? `<div class="card-head"><div><span class="pill">${next.date === todayIso() ? 'Tonight' : 'Next game'}</span><h2>Week ${next.week} · ${longDay(next.date)}</h2></div></div>${setterLine(next)}${matchRows(next.matches)}`
+    : '<span class="pill">Next game</span><h2>That’s the season done</h2><p class="muted" style="margin:0">No more league fixtures this season.</p>';
+  $('last-card').innerHTML = last
+    ? `<div class="card-head"><div><span class="pill">Last results</span><h2>Week ${last.week} · ${longDay(last.date)}</h2></div></div>${setterLine(last)}${matchRows(last.matches)}`
+    : '<span class="pill">Last results</span><h2>No results yet</h2><p class="muted" style="margin:0">Results appear here once the first scores are in.</p>';
+
+  $('home-table').innerHTML = tableHtml(league.table, true);
+  $('full-table').innerHTML = tableHtml(league.table, false);
+
+  const filter = $('team-filter');
+  if (filter.options.length === 1) filter.insertAdjacentHTML('beforeend', league.teams.map(t => `<option>${esc(t)}</option>`).join(''));
+  renderWeeks();
+  fillSendForm();
+  $('updated').textContent = 'Updated ' + new Date(league.updated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + '.';
+}
+
+function renderWeeks() {
+  const team = $('team-filter').value;
+  $('weeks').innerHTML = league.weeks.map(w => {
+    const matches = team ? w.matches.filter(m => m.home === team || m.away === team) : w.matches;
+    const setting = team && w.setter === team;
+    const body = matches.length ? matchRows(matches, team) : (setting ? '' : '<p class="muted" style="margin:0">Not playing this week.</p>');
+    const tag = w.week === league.nextWeek ? '<span class="pill">Next</span>' : '';
+    return `<article class="card week${w.week === league.nextWeek ? ' next' : ''}" id="week-${w.week}">
+      <div class="card-head"><h3>Week ${w.week} · ${day(w.date)}</h3>${tag}</div>
+      ${setting ? `<div class="setter"><span aria-hidden="true">✎</span><span><b>${esc(team)}</b> are setting the questions this week</span></div>` : (team ? '' : setterLine(w))}
+      ${body}</article>`;
+  }).join('');
+}
+
+$('team-filter').addEventListener('change', renderWeeks);
+$('jump-next').addEventListener('click', () => {
+  const el = $('week-' + league.nextWeek);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* Send a score */
+function sendableWeeks() {
+  const today = todayIso();
+  return league.weeks.filter(w => w.date <= today).reverse();
+}
+
+function fillSendForm() {
+  const weeks = sendableWeeks();
+  const sel = $('send-week');
+  const keep = sel.value;
+  sel.innerHTML = weeks.length ? weeks.map(w => `<option value="${w.week}">Week ${w.week} · ${day(w.date)}</option>`).join('') : '<option value="">No matches played yet</option>';
+  // Default to the most recent week that still has a match without a score.
+  const open = weeks.find(w => w.matches.some(m => !m.played));
+  sel.value = keep && weeks.some(w => String(w.week) === keep) ? keep : String((open || weeks[0] || {}).week || '');
+  fillMatches();
+}
+
+function fillMatches() {
+  const w = weekOf(Number($('send-week').value));
+  const sel = $('send-match');
+  if (!w) { sel.innerHTML = ''; return; }
+  const keep = sel.value;
+  const myTeam = store.get('svql-team');
+  sel.innerHTML = w.matches.map((m, i) => `<option value="${i}">${esc(m.home)} v ${esc(m.away)}${m.played ? ` (${m.homeScore}–${m.awayScore} sent)` : ''}</option>`).join('');
+  const mine = w.matches.findIndex(m => m.home === myTeam);
+  sel.value = keep && w.matches[keep] ? keep : String(mine >= 0 ? mine : Math.max(0, w.matches.findIndex(m => !m.played)));
+  labelMatch();
+}
+
+function currentMatch() {
+  const w = weekOf(Number($('send-week').value));
+  return w && { week: w, match: w.matches[Number($('send-match').value)] };
+}
+
+function labelMatch() {
+  const cur = currentMatch();
+  if (!cur || !cur.match) return;
+  $('home-label').textContent = cur.match.home + ' (home)';
+  $('away-label').textContent = cur.match.away + ' (away)';
+  $('first-home').textContent = cur.match.home;
+  $('first-away').textContent = cur.match.away;
+}
+
+$('send-week').addEventListener('change', () => { $('send-match').value = ''; fillMatches(); });
+$('send-match').addEventListener('change', labelMatch);
+$('code').value = store.get('svql-code') || '';
+
+$('send-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = $('send-msg');
+  const show = (text, kind) => { msg.hidden = false; msg.className = 'notice ' + kind; msg.textContent = text; };
+  const cur = currentMatch();
+  if (!cur || !cur.match) return show('Pick a match.', 'error');
+  const homeScore = Number($('home-score').value), awayScore = Number($('away-score').value);
+  const first = document.querySelector('input[name="first"]:checked');
+  if ($('home-score').value === '' || $('away-score').value === '') return show('Enter both scores.', 'error');
+  if (!first) return show('Say which team went first.', 'error');
+  if (!$('code').value.trim()) return show('Enter your team code.', 'error');
+  const { home, away } = cur.match;
+  if (cur.match.played && !confirm(`${home} v ${away} already shows ${cur.match.homeScore}–${cur.match.awayScore}. Replace it with ${homeScore}–${awayScore}?`)) return;
+
+  const btn = $('send-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const res = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ week: cur.week.week, home, away, homeScore, awayScore, wentFirst: first.value, code: $('code').value.trim() }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || 'The score didn’t send. Please try again.');
+    store.set('svql-code', $('code').value.trim());
+    if (data.by && data.by !== 'League') store.set('svql-team', data.by);
+    show(`Thanks. ${home} ${homeScore} – ${awayScore} ${away} is in the league sheet.`, 'done');
+    $('home-score').value = ''; $('away-score').value = ''; first.checked = false;
+    await load(true);
+  } catch (err) {
+    show(err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send score';
+  }
+});
+
+/* Tabs */
+function route() {
+  const name = (location.hash || '#home').slice(1);
+  const view = ['home', 'table', 'fixtures', 'send'].includes(name) ? name : 'home';
+  document.querySelectorAll('section.view').forEach(s => { s.hidden = !league || s.id !== 'view-' + view; });
+  document.querySelectorAll('nav.tabs a').forEach(a => { if (a.getAttribute('href') === '#' + view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  if (view === 'fixtures' && league && !route.scrolled) {
+    route.scrolled = true;
+    requestAnimationFrame(() => { const el = $('week-' + league.nextWeek); if (el) el.scrollIntoView({ block: 'start' }); });
+  }
+}
+window.addEventListener('hashchange', route);
+load().then(route);
+</script>
+</html>
