@@ -2,38 +2,40 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1d3a2c">
+<meta name="theme-color" content="#143a5e">
 <meta name="description" content="Sett Valley Quiz League: league table, fixtures, results and who is setting the questions each week.">
 <title>Sett Valley Quiz League</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d3a2c'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%23f2c14e'%3E%3F%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
-/* Layout: one column; valley-green header with tabs, Home shows next game, last results and the table. */
+/* Layout: one column; league-blue header with the SVQL logo; its blue-green is the highlight colour with tabs, Home shows next game, last results and the table. */
 :root {
-  --bg: #f5f2ea;
+  --bg: #eef3f7;
   --surface: #ffffff;
-  --ink: #1b2420;
-  --muted: #56615b;
-  --line: #e0dccf;
-  --head: #1d3a2c;      /* valley green */
-  --head-ink: #f6f1e3;
-  --accent: #c8901a;    /* ochre */
-  --accent-soft: #fbf0d6;
-  --win: #2f7a46;
-  --btn: #1d3a2c;
-  --btn-ink: #f6f1e3;
-  --loss: #a8402f;
+  --ink: #0f1d2a;
+  --muted: #4b5d6d;
+  --line: #d4dfe8;
+  --head: #143a5e;      /* league blue */
+  --head-ink: #eef7ff;
+  --brand: #2fffcd;     /* logo blue-green */
+  --accent: #0a8a73;    /* the blue-green, deep enough to read on white */
+  --accent-soft: #d6f6ee;
+  --win: #1f8a5b;
+  --loss: #b8433a;
+  --btn: #143a5e;
+  --btn-ink: #ffffff;
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #111613; --surface: #19201c; --ink: #e9ece6; --muted: #a9b3ac; --line: #2b3530;
-  --head: #0e1d16; --head-ink: #f6f1e3; --accent: #f2c14e; --accent-soft: #2c2716; --win: #6cc58a; --loss: #ee8a7a; --btn: #f2c14e; --btn-ink: #14231b;
+  --bg: #08131f; --surface: #0f1f30; --ink: #e6eef5; --muted: #9fb2c3; --line: #1f3347;
+  --head: #10304e; --head-ink: #eef7ff; --accent: #2fffcd; --accent-soft: #0e3442; --win: #4fd69a; --loss: #f08679; --btn: #2fffcd; --btn-ink: #03211b;
   color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #111613; --surface: #19201c; --ink: #e9ece6; --muted: #a9b3ac; --line: #2b3530;
-  --head: #0e1d16; --head-ink: #f6f1e3; --accent: #f2c14e; --accent-soft: #2c2716; --win: #6cc58a; --loss: #ee8a7a; --btn: #f2c14e; --btn-ink: #14231b;
+  --bg: #08131f; --surface: #0f1f30; --ink: #e6eef5; --muted: #9fb2c3; --line: #1f3347;
+  --head: #10304e; --head-ink: #eef7ff; --accent: #2fffcd; --accent-soft: #0e3442; --win: #4fd69a; --loss: #f08679; --btn: #2fffcd; --btn-ink: #03211b;
   color-scheme: dark }
 
 * { box-sizing: border-box }
@@ -44,12 +46,13 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
 header.top { background: var(--head); color: var(--head-ink); position: sticky; top: 0; z-index: 5 }
 header.top .wrap { padding-top: 14px; display: grid; gap: 8px }
 .brand { display: flex; align-items: center; gap: 12px }
-.brand .mark { width: 44px; height: 44px; flex: none; border-radius: 10px; background: var(--accent); color: #1d3a2c; display: grid; place-items: center; font: 800 1.8rem/1 var(--font-display) }
+.brand img { height: 56px; width: auto; flex: none; display: block }
 .brand h1 { font: 800 1.6rem/1.1 var(--font-display); margin: 0; letter-spacing: .005em }
+@media (max-width: 420px) { .brand h1 { font-size: 1.3rem } .brand img { height: 48px } }
 .brand .season { font-size: .82rem; opacity: .8; letter-spacing: .06em; text-transform: uppercase }
 nav.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-inline: -8px }
 nav.tabs a { color: inherit; text-decoration: none; font-weight: 600; padding: 8px 10px 10px; border-bottom: 3px solid transparent; white-space: nowrap; opacity: .82 }
-nav.tabs a[aria-current="page"] { opacity: 1; border-bottom-color: var(--accent) }
+nav.tabs a[aria-current="page"] { opacity: 1; color: var(--brand); border-bottom-color: var(--brand) }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
 main { padding-block: 20px 48px }
@@ -118,7 +121,7 @@ footer a { color: inherit }
 <header class="top">
   <div class="wrap">
     <div class="brand">
-      <div class="mark" aria-hidden="true">?</div>
+      <img src="/logo.png" alt="SVQL" width="46" height="56">
       <div>
         <h1>Sett Valley Quiz League</h1>
         <div class="season" id="season">Pub quiz league · Sett Valley, Derbyshire</div>
