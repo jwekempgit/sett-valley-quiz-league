@@ -41,7 +41,7 @@ The site is then live at `sett-valley-quiz-league.pages.dev`, showing the table,
 2. Delete whatever is in the editor, paste in the whole of `apps-script/Code.gs`, and press **Save**.
 3. Press **Deploy → New deployment**. Click the cog next to "Select type" and choose **Web app**. Set **Execute as: Me** and **Who has access: Anyone**, then **Deploy**. Google asks you to authorise it; allow it (if it says the app isn't verified, choose **Advanced → Go to … (unsafe)**; it's your own script).
 4. Copy the **Web app URL** it shows (it ends in `/exec`).
-5. In Cloudflare, open the Pages project, go to **Settings → Variables and Secrets**, and add a secret called `APPS_SCRIPT_URL` with that URL. Then redeploy once from the **Deployments** tab.
+5. In Cloudflare, open the Pages project, go to **Settings → Variables and Secrets**, and add a secret called `APPS_SCRIPT_URL` with that URL. Then redeploy so the site picks it up: on the **Deployments** tab, open the ⋯ menu on the latest Production deployment and choose **Retry deployment** (any push to `main` does the same).
 6. Reload the Google Sheet. A **Quiz League** menu appears. Choose **Quiz League → Show team codes** to see a code for each team, plus a **League** code for you. Give each captain their team's code.
 
 "Anyone" only means the website can reach the script; a score is only accepted with the right team code, and only the home team's code (or the League code) works for a match. After 20 wrong codes in ten minutes it stops accepting codes for ten minutes.
