@@ -52,6 +52,7 @@ header.top .wrap { padding-top: 14px; display: grid; gap: 8px }
 .brand .season { font-size: .82rem; opacity: .8; letter-spacing: .06em; text-transform: uppercase }
 nav.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-inline: -8px }
 nav.tabs a { color: inherit; text-decoration: none; font-weight: 600; padding: 8px 10px 10px; border-bottom: 3px solid transparent; white-space: nowrap; opacity: .82 }
+@media (max-width: 560px) { nav.tabs .long { display: none } nav.tabs a { padding-inline: 8px } }
 nav.tabs a[aria-current="page"] { opacity: 1; color: var(--brand); border-bottom-color: var(--brand) }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
@@ -114,6 +115,14 @@ form.send { display: grid; gap: 16px }
 .choice label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; background: var(--surface); cursor: pointer; font-weight: 400 }
 .choice input { accent-color: var(--head) }
 .done { border-left-color: var(--win) }
+.join { gap: 14px }
+.join p, .join ul { margin: 0 }
+.join h3 { margin-top: 10px }
+.join .lead { font-size: 1.15rem; font-weight: 600 }
+.join a { color: var(--accent); font-weight: 600 }
+.join-img { width: 100%; height: auto; border-radius: 10px; display: block; background: var(--bg) }
+.ticks { padding-left: 1.2em; display: grid; gap: 4px }
+.ticks li::marker { color: var(--accent) }
 footer { text-align: center; color: var(--muted); font-size: .85rem; padding-bottom: 28px }
 footer a { color: inherit }
 .credit a { text-decoration: none; display: inline-flex; align-items: center; gap: 5px }
@@ -134,8 +143,9 @@ footer a { color: inherit }
     <nav class="tabs" aria-label="Sections">
       <a href="#home">Home</a>
       <a href="#table">Table</a>
-      <a href="#fixtures">Fixtures &amp; results</a>
+      <a href="#fixtures">Fixtures<span class="long"> &amp; results</span></a>
       <a href="#send">Send score</a>
+      <a href="#join">Join</a>
     </nav>
   </div>
 </header>
@@ -201,6 +211,50 @@ footer a { color: inherit }
         <div id="send-msg" class="notice" hidden></div>
         <div><button class="btn" type="submit" id="send-btn">Send score</button></div>
       </form>
+    </article>
+  </section>
+  <section class="view" id="view-join" hidden>
+    <article class="card join">
+      <h2>Join the league</h2>
+      <img class="join-img" src="https://lh7-us.googleusercontent.com/sitesv-images-rt/AMxu72vV82V1zPwH5AEfMEuFgnZp69BsHZq62cJoBdi_jshq3CFzTjDu-a6T3ojukfgpUl2UGLhpqxMZKNydZC5pbwQgC4L3vhjK5zdaAyzyIJ0djpQyBQoSM4Viz8A-feAeKQvEGbmX6H6Gs5W4eba9YziU-RYILw4hAQDK4ynTX3_5LEvIoOTRsw7OeTwKUmNUJ2uMB2UZHTj5An3V_s0iqBSD1UBc-lgmSVitxcK8WsQ=w1280" alt="" loading="lazy">
+      <p class="lead">The Sett Valley Quiz League is keen to recruit new players, teams and venues.</p>
+      <p><strong>Do you have what it takes?</strong></p>
+      <ul class="ticks">
+        <li>Competitive but friendly</li>
+        <li>Six players per team</li>
+        <li>Fixtures on Thursday evenings, September–May</li>
+        <li>Venues in Chapel-en-le-Frith, Chinley, Whaley Bridge, New Mills, Hayfield, Disley, High Lane, etc.</li>
+      </ul>
+      <p>The Sett Valley Quiz League has been running for many years and provides an opportunity for teams to compete in a challenging but friendly weekly quiz competition. Home venues range from Chapel-en-le-Frith to Disley, including Whaley Bridge, New Mills, Hayfield and Chinley. There are currently nine teams in the league (see map below).</p>
+      <p>While we are mainly looking to recruit entirely new teams and venues, interested individuals are welcome to make contact with the organisers at <a href="mailto:info@settvalleyquizleague.com">info@settvalleyquizleague.com</a>, and we’ll put you in touch with existing teams who might welcome new blood.</p>
+
+      <h3>Schedule and competitions</h3>
+      <p>SVQL matches are held weekly on Thursday nights from September to April or May, starting at 9pm (or 8.30 by negotiation with the opposition) with gaps for Christmas and Easter. Each team plays each other home and away over the season to determine final league positions.</p>
+
+      <h3>Venues</h3>
+      <p>Teams need a home venue, which should have a bar and ideally a fairly quiet space where the quiz (which takes about an hour, with a half-time break of 10 minutes or so) can be held. Some venues provide light refreshments after the quiz, but this is not mandatory. As teams play home and away, each venue will only be required to host a fixture every other week on average.</p>
+
+      <h3>Questions</h3>
+      <p>All teams answer the same set of 60 general-knowledge questions, set by a team that isn’t playing that week; each team can expect to set the questions two or three times per season. The away team collects the sealed questions from a central venue on the night. Questions are accessible, but more challenging than the average fun quiz: think Mastermind general-knowledge round rather than Tipping Point.</p>
+
+      <h3>Teams and format</h3>
+      <p>A full team consists of six players, one of them acting as captain, plus a question-master. Squads can have more than six members, but only six can play on the night. Questions are asked alternately to each team, who have 30 seconds for discussion before the captain announces the team’s collective answer. If the answer is deemed wrong, the question is passed to the opposition, who have 10 seconds to answer.</p>
+
+      <h3>Captains</h3>
+      <p>As well as their matchday role, captains are also responsible for ensuring that, when it’s their team’s turn to set the quiz, the questions are delivered to the collection point on the night (although the captain does not have to be the person who sets the questions). Captains are also expected to attend the league AGM, to ensure that the league’s modest annual subscription (currently £10 per team and not required every season) is paid, to liaise with other team captains as necessary, and to pass on relevant information from the league organisers to their team members. It’s not an onerous role and can be shared.</p>
+
+      <h3>Questionmaster</h3>
+      <p>In each match, the home team is required to provide a question-master, who asks the questions and keeps score. Some teams have dedicated question-masters while others rotate the job around squad members. Once the final score has been communicated by the question-master and agreed by the two captains, it is the home captain’s responsibility to submit the score to the league website within 24 hours.</p>
+
+      <h3>League setup</h3>
+      <p>The league is run by an informal committee of three. Results and current league tables are published on this website. The league AGM is normally held a couple of weeks before the start of the new season.</p>
+
+      <h3>Apply now</h3>
+      <p>To apply to join the league, or for more information, contact <a href="mailto:info@settvalleyquizleague.com">info@settvalleyquizleague.com</a>.</p>
+      <img class="join-img" src="https://lh7-us.googleusercontent.com/sitesv-images-rt/AMxu72t2BfH2P3aeRTL_usabeBQs0T7WNJR9MpD3q8OwML-fJpIFyRSKUnKDpwN0mX_TvFVPts-DMRA82OPpTn4sT7CicjX3NfGV3Rk1u-s5148Jv8KNdx-Uu-TW4pwxjiToG1kdj_Y3sG18liREKgpd_Ret5s-jbbAj0ZaG6zLuu6cP9-vM5kEaY4JOIjxR-pxhR-Hz0EPMCyGMXpstkljwyrL6ryYfKzdarC6J-8OWvOU=w1280" alt="Map of the league’s venues" loading="lazy">
+
+      <h3>Example questions</h3>
+      <p><a href="https://drive.google.com/open?id=136ZI10DGggvQpRmp5vPJ-L0eTYsxmjzy8uvQuOyH6Hw" target="_blank" rel="noopener">SVQL Questions 4-11-21</a> (opens in Google Docs)</p>
     </article>
   </section>
 </main>
@@ -376,8 +430,10 @@ $('send-form').addEventListener('submit', async e => {
 /* Tabs */
 function route() {
   const name = (location.hash || '#home').slice(1);
-  const view = ['home', 'table', 'fixtures', 'send'].includes(name) ? name : 'home';
-  document.querySelectorAll('section.view').forEach(s => { s.hidden = !league || s.id !== 'view-' + view; });
+  const view = ['home', 'table', 'fixtures', 'send', 'join'].includes(name) ? name : 'home';
+  // The Join page is plain text, so it shows even if the league sheet hasn't loaded.
+  document.querySelectorAll('section.view').forEach(s => { s.hidden = s.id !== 'view-' + view || (!league && view !== 'join'); });
+  if (view === 'join') $('status').hidden = true; else if (!league) $('status').hidden = false;
   document.querySelectorAll('nav.tabs a').forEach(a => { if (a.getAttribute('href') === '#' + view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   if (view === 'fixtures' && league && !route.scrolled) {
     route.scrolled = true;
