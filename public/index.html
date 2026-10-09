@@ -174,7 +174,7 @@ footer a { color: inherit }
   <section class="view" id="view-send" hidden>
     <article class="card">
       <h2>Send the score</h2>
-      <p class="muted" style="margin:0">For the home team at the end of the night. The score goes straight into the league sheet and the table updates.</p>
+      <p class="muted" style="margin:0">For either team at the end of the night. The score goes straight into the league sheet and the table updates. If a score looks wrong, send the right one or let the league know.</p>
       <form class="send" id="send-form" novalidate>
         <div class="field">
           <label for="send-week">Week</label>
@@ -198,11 +198,6 @@ footer a { color: inherit }
             <label><input type="radio" name="first" value="Away"> <span id="first-away">Away</span></label>
           </div>
         </div>
-        <div class="field">
-          <label for="code">Team code</label>
-          <input id="code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="6 letters and numbers">
-          <span class="small muted">Your captain has it. This phone remembers it once it’s worked.</span>
-        </div>
         <div id="send-msg" class="notice" hidden></div>
         <div><button class="btn" type="submit" id="send-btn">Send score</button></div>
       </form>
@@ -218,10 +213,6 @@ footer a { color: inherit }
 let league = null;
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const store = {
-  get(k) { try { return localStorage.getItem(k) } catch { return null } },
-  set(k, v) { try { localStorage.setItem(k, v) } catch {} },
-};
 
 const dayFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
 const longFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
@@ -327,10 +318,8 @@ function fillMatches() {
   const sel = $('send-match');
   if (!w) { sel.innerHTML = ''; return; }
   const keep = sel.value;
-  const myTeam = store.get('svql-team');
   sel.innerHTML = w.matches.map((m, i) => `<option value="${i}">${esc(m.home)} v ${esc(m.away)}${m.played ? ` (${m.homeScore}–${m.awayScore} sent)` : ''}</option>`).join('');
-  const mine = w.matches.findIndex(m => m.home === myTeam);
-  sel.value = keep && w.matches[keep] ? keep : String(mine >= 0 ? mine : Math.max(0, w.matches.findIndex(m => !m.played)));
+  sel.value = keep && w.matches[keep] ? keep : String(Math.max(0, w.matches.findIndex(m => !m.played)));
   labelMatch();
 }
 
@@ -350,7 +339,6 @@ function labelMatch() {
 
 $('send-week').addEventListener('change', () => { $('send-match').value = ''; fillMatches(); });
 $('send-match').addEventListener('change', labelMatch);
-$('code').value = store.get('svql-code') || '';
 
 $('send-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -362,7 +350,6 @@ $('send-form').addEventListener('submit', async e => {
   const first = document.querySelector('input[name="first"]:checked');
   if ($('home-score').value === '' || $('away-score').value === '') return show('Enter both scores.', 'error');
   if (!first) return show('Say which team went first.', 'error');
-  if (!$('code').value.trim()) return show('Enter your team code.', 'error');
   const { home, away } = cur.match;
   if (cur.match.played && !confirm(`${home} v ${away} already shows ${cur.match.homeScore}–${cur.match.awayScore}. Replace it with ${homeScore}–${awayScore}?`)) return;
 
@@ -372,12 +359,10 @@ $('send-form').addEventListener('submit', async e => {
     const res = await fetch('/api/submit', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ week: cur.week.week, home, away, homeScore, awayScore, wentFirst: first.value, code: $('code').value.trim() }),
+      body: JSON.stringify({ week: cur.week.week, home, away, homeScore, awayScore, wentFirst: first.value }),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.ok) throw new Error(data.error || 'The score didn’t send. Please try again.');
-    store.set('svql-code', $('code').value.trim());
-    if (data.by && data.by !== 'League') store.set('svql-team', data.by);
     show(`Thanks. ${home} ${homeScore} – ${awayScore} ${away} is in the league sheet.`, 'done');
     $('home-score').value = ''; $('away-score').value = ''; first.checked = false;
     await load(true);

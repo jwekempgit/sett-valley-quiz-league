@@ -1,22 +1,21 @@
 import { checkScores } from '../../lib/league.js';
 import { loadLeague, londonToday } from './league.js';
 
-// POST /api/submit: the home team sends the final score.
-// The site checks the match and the numbers, then hands it to the Apps Script in the Google Sheet,
-// which checks the team code and writes the score into that week's tab.
+// POST /api/submit: anyone from either team sends the final score; no code needed (the league agreed the
+// other team will spot and correct a wrong one). The site checks the match and the numbers, then hands it to
+// the Apps Script in the Google Sheet with the League code (a Cloudflare secret), and the script writes the
+// score into that week's tab. The script still wants a code, so only this site can write to the sheet.
 export async function onRequestPost({ request, env }) {
-  if (!env.APPS_SCRIPT_URL) return json({ error: 'Score sending isn’t switched on yet. Please send your score to the league as usual.' }, 503);
+  if (!env.APPS_SCRIPT_URL || !env.LEAGUE_CODE) return json({ error: 'Score sending isn’t switched on yet. Please send your score to the league as usual.' }, 503);
 
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Bad request.' }, 400); }
   const homeScore = Number(body.homeScore), awayScore = Number(body.awayScore);
   const wentFirst = body.wentFirst === 'Home' || body.wentFirst === 'Away' ? body.wentFirst : null;
-  const code = String(body.code || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 
   const bad = checkScores(homeScore, awayScore);
   if (bad) return json({ error: bad }, 400);
   if (!wentFirst) return json({ error: 'Say which team went first.' }, 400);
-  if (!code) return json({ error: 'Enter your team code.' }, 400);
 
   const league = await loadLeague(env);
   const week = league.weeks.find(w => w.week === Number(body.week));
@@ -29,7 +28,7 @@ export async function onRequestPost({ request, env }) {
     const res = await fetch(env.APPS_SCRIPT_URL, {
       method: 'POST',
       headers: { 'content-type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ tab: week.tab, home: match.home, away: match.away, homeScore, awayScore, wentFirst, code }),
+      body: JSON.stringify({ tab: week.tab, home: match.home, away: match.away, homeScore, awayScore, wentFirst, code: env.LEAGUE_CODE }),
       redirect: 'follow',
     });
     result = await res.json();
