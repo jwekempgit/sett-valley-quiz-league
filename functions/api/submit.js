@@ -6,7 +6,8 @@ import { loadLeague, londonToday } from './league.js';
 // the Apps Script in the Google Sheet with the League code (a Cloudflare secret), and the script writes the
 // score into that week's tab. The script still wants a code, so only this site can write to the sheet.
 export async function onRequestPost({ request, env }) {
-  if (!env.APPS_SCRIPT_URL || !env.LEAGUE_CODE) return json({ error: 'Score sending isn’t switched on yet. Please send your score to the league as usual.' }, 503);
+  const missing = ['APPS_SCRIPT_URL', 'LEAGUE_CODE'].filter(k => !env[k]);
+  if (missing.length) return json({ error: `Score sending isn’t switched on yet (the site can’t see ${missing.join(' or ')}). Please send your score to the league as usual.` }, 503);
 
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Bad request.' }, 400); }
@@ -25,10 +26,10 @@ export async function onRequestPost({ request, env }) {
 
   let result;
   try {
-    const res = await fetch(env.APPS_SCRIPT_URL, {
+    const res = await fetch(String(env.APPS_SCRIPT_URL).trim(), {
       method: 'POST',
       headers: { 'content-type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ tab: week.tab, home: match.home, away: match.away, homeScore, awayScore, wentFirst, code: env.LEAGUE_CODE }),
+      body: JSON.stringify({ tab: week.tab, home: match.home, away: match.away, homeScore, awayScore, wentFirst, code: String(env.LEAGUE_CODE).trim() }),
       redirect: 'follow',
     });
     result = await res.json();
