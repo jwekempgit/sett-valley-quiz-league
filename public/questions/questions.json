@@ -1,0 +1,7 @@
+{
+  "_about": "Question sets for each week. Key: the match date (yyyy-mm-dd). Value: the file in this folder. Each set shows on the site from the day after the matches.",
+  "sets": {
+    "2026-10-01": "week-1-2026-10-01.pdf",
+    "2026-10-08": "week-2-2026-10-08.pdf"
+  }
+}

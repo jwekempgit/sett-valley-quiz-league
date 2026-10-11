@@ -69,3 +69,7 @@ npm run dev
 ```
 
 Then open http://localhost:8788. To try score sending locally, put `APPS_SCRIPT_URL=…` in a `.dev.vars` file.
+
+## Adding a week's questions
+
+Put the file (PDF or an image) in `public/questions/` and add a line to `public/questions/questions.json` with the match date and the file name, like `"2026-10-15": "week-3-2026-10-15.pdf"`. Push to `main`. The set appears on the Questions page, with a link from that week on Fixtures & results, from the day after the matches.
