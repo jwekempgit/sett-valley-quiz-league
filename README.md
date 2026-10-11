@@ -47,6 +47,10 @@ The site is then live at `sett-valley-quiz-league.pages.dev`, showing the table,
 
 If you ever change `Code.gs`, use **Deploy → Manage deployments → Edit (pencil) → Version: New version → Deploy** so the URL stays the same.
 
+### The score code
+
+People sending a score type the league's one shared score code. Set it as a Cloudflare secret called `SCORE_CODE` (any word or number you like; capitals and spaces don't matter), then redeploy. To change it, edit the secret and redeploy. Each phone remembers the code once it has worked.
+
 ### The League code
 
 - **Quiz League → Show team codes** shows it. The per-team codes are left over from an earlier version and aren't used by the site.
