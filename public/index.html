@@ -126,6 +126,10 @@ form.send { display: grid; gap: 16px }
 .ticks li::marker { color: var(--accent) }
 .q-pick { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
 .q-pick select { flex: 1 1 220px }
+.q-search { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: inherit }
+.q-table .q-w { white-space: nowrap; width: 5.5em }
+.q-table .q-w a { color: var(--accent); font-weight: 600; text-decoration: none }
+.q-table mark { background: color-mix(in srgb, var(--brand) 45%, transparent); color: inherit; border-radius: 3px }
 .q-toggle { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; white-space: nowrap }
 .q-h { margin: 14px 0 4px; font-size: 1.05rem }
 .q-table { width: 100%; border-collapse: collapse }
@@ -139,6 +143,7 @@ form.send { display: grid; gap: 16px }
   .q-table tr { display: grid; grid-template-columns: 2em 1fr; border-bottom: 1px solid var(--line); padding: 8px 0 }
   .q-table td { border: 0; padding: 2px 4px }
   .q-table td.q-a { grid-column: 2; width: auto; color: var(--accent) }
+  .q-table td.q-w { grid-column: 1 / -1; width: auto }
   .q-hidden .q-a { display: none }
 }
 .q-link { color: var(--accent); font-weight: 600; text-decoration: none; white-space: nowrap }
@@ -473,28 +478,65 @@ $('send-form').addEventListener('submit', async e => {
 
 /* Tabs */
 const questionCache = {};
-async function renderQuestions(wanted) {
+const loadSet = async w => questionCache[w.date] ||= await fetch(questionsFor(w)).then(r => r.ok ? r.json() : null).catch(() => null)
+  .then(set => set || (delete questionCache[w.date], null));
+const fold = t => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+// Search matches the start of a word (so "olivia" finds Olivia Dean but not Bolivia), ignoring case and accents.
+const wordStart = term => new RegExp('(^|[^a-z0-9])' + fold(term).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+// Wraps each match of the search in <mark>.
+function highlight(text, term) {
+  if (!term) return esc(text);
+  const f = fold(text), t = fold(term);
+  let out = '', i = 0;
+  for (const m of f.matchAll(wordStart(term))) { const j = m.index + m[1].length; out += esc(text.slice(i, j)) + '<mark>' + esc(text.slice(j, j + t.length)) + '</mark>'; i = j + t.length; }
+  return out + esc(text.slice(i));
+}
+const qTable = (body, extra = '') => `<table class="q-table"><thead><tr>${extra ? '<th class="q-w">Week</th>' : ''}<th class="q-n">#</th><th class="q-q">Question</th><th class="q-a">Answer</th></tr></thead><tbody>${body}</tbody></table>`;
+const qRow = (n, q, term, week = '') => `<tr>${week}<td class="q-n">${n}</td><td class="q-q">${highlight(q.q, term)}</td><td class="q-a">${highlight(q.a, term)}</td></tr>`;
+
+function renderQuestions(wanted) {
   const weeks = league.weeks.filter(questionsFor).reverse();
   if (!weeks.length) { $('q-body').innerHTML = '<p class="muted" style="margin:0">No question sets yet.</p>'; return; }
   const w = weeks.find(x => x.week === wanted) || weeks[0];
-  $('q-body').innerHTML = `<div class="q-pick">
+  const term = $('q-search')?.value || '';
+  $('q-body').innerHTML = `<input type="search" id="q-search" class="q-search" placeholder="Search every week’s questions and answers" aria-label="Search questions" value="${esc(term)}">
+    <div class="q-pick">
       <select id="q-week" aria-label="Week">${weeks.map(x => `<option value="${x.week}"${x === w ? ' selected' : ''}>Week ${x.week} · ${day(x.date)}${x.setter ? ' · set by ' + esc(x.setter) : ''}</option>`).join('')}</select>
       <label class="q-toggle"><input type="checkbox" id="q-hide"> Hide answers</label>
-    </div><div id="q-sets"><p class="muted" style="margin:0">Loading…</p></div>`;
-  $('q-week').addEventListener('change', e => { location.hash = 'questions/' + e.target.value; });
+    </div><div id="q-sets"></div>`;
+  $('q-week').addEventListener('change', e => { $('q-search').value = ''; location.hash = 'questions/' + e.target.value; });
   $('q-hide').addEventListener('change', e => $('q-sets').classList.toggle('q-hidden', e.target.checked));
-  let set = questionCache[w.date];
-  if (!set) {
-    set = await fetch(questionsFor(w)).then(r => r.ok ? r.json() : null).catch(() => null);
-    if (set) questionCache[w.date] = set;
-  }
-  if (!$('q-sets') || Number($('q-week').value) !== w.week) return;
+  let timer;
+  $('q-search').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => $('q-search').value.trim().length >= 2 ? showSearch(weeks) : showWeek(w), 200); });
+  term.trim().length >= 2 ? showSearch(weeks) : showWeek(w);
+}
+
+async function showWeek(w) {
+  $('q-week').hidden = false;
+  $('q-sets').innerHTML = '<p class="muted" style="margin:0">Loading…</p>';
+  const set = await loadSet(w);
+  if (Number($('q-week').value) !== w.week || $('q-search').value.trim().length >= 2) return;
   if (!set) { $('q-sets').innerHTML = '<p class="muted" style="margin:0">Couldn’t load these questions. Please try again.</p>'; return; }
-  const rows = (list, numbered) => list.map((q, i) => `<tr><td class="q-n">${numbered ? q.n : i + 1}</td><td class="q-q">${esc(q.q)}</td><td class="q-a">${esc(q.a)}</td></tr>`).join('');
-  const block = (title, list, numbered) => list?.length ? `<h3 class="q-h">${title}</h3>
-    <table class="q-table"><thead><tr><th class="q-n">#</th><th class="q-q">Question</th><th class="q-a">Answer</th></tr></thead><tbody>${rows(list, numbered)}</tbody></table>` : '';
+  const block = (title, list, numbered) => list?.length ? `<h3 class="q-h">${title}</h3>${qTable(list.map((q, i) => qRow(numbered ? q.n : i + 1, q)).join(''))}` : '';
   $('q-sets').innerHTML = set.halves.map(h => block(esc(h.title), h.questions, true) + block(esc(h.title) + ' spares', h.spares, false)).join('')
     + block('Spares', set.spares, false);
+}
+
+async function showSearch(weeks) {
+  const term = $('q-search').value.trim();
+  $('q-week').hidden = true;
+  const sets = await Promise.all(weeks.map(loadSet));
+  if ($('q-search').value.trim() !== term) return;
+  const re = new RegExp(wordStart(term).source), hits = [];
+  weeks.forEach((w, k) => {
+    const set = sets[k]; if (!set) return;
+    const add = (q, n) => { if (re.test(fold(q.q)) || re.test(fold(q.a))) hits.push({ w, q, n }); };
+    set.halves.forEach(h => { h.questions.forEach(q => add(q, q.n)); h.spares.forEach((q, i) => add(q, 'S' + (i + 1))); });
+    (set.spares || []).forEach((q, i) => add(q, 'S' + (i + 1)));
+  });
+  $('q-sets').innerHTML = `<p class="muted" style="margin:0">${hits.length ? `${hits.length} question${hits.length === 1 ? '' : 's'} with “${esc(term)}”` : `No questions with “${esc(term)}”.`}</p>`
+    + (hits.length ? qTable(hits.map(h => qRow(h.n, h.q, term, `<td class="q-w"><a href="#questions/${h.w.week}">Week ${h.w.week}</a></td>`)).join(''), true) : '');
+  $('q-sets').querySelectorAll('.q-w a').forEach(a => a.addEventListener('click', () => { $('q-search').value = ''; }));
 }
 
 function route() {
