@@ -53,7 +53,7 @@ header.top .wrap { padding-top: 14px; display: grid; gap: 8px }
 nav.tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin-inline: -8px }
 nav.tabs a { color: inherit; text-decoration: none; font-weight: 600; padding: 8px 10px 10px; border-bottom: 3px solid transparent; white-space: nowrap; opacity: .82 }
 @media (max-width: 560px) { nav.tabs .long { display: none } nav.tabs a { padding-inline: 8px } }
-@media (max-width: 430px) { nav.tabs { gap: 0 } nav.tabs a { padding-inline: 6px; font-size: 14.5px } }
+@media (max-width: 430px) { nav.tabs .xlong { display: none } nav.tabs { gap: 0 } nav.tabs a { padding-inline: 6px; font-size: 14.5px } }
 nav.tabs a[aria-current="page"] { opacity: 1; color: var(--brand); border-bottom-color: var(--brand) }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
@@ -116,6 +116,17 @@ form.send { display: grid; gap: 16px }
 .choice label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; background: var(--surface); cursor: pointer; font-weight: 400 }
 .choice input { accent-color: var(--head) }
 .done { border-left-color: var(--win) }
+.rules { gap: 12px }
+.rules h3 { margin: 12px 0 0; font-size: 1.1rem; padding-bottom: 6px; border-bottom: 2px solid var(--brand) }
+.rules a { color: var(--accent); font-weight: 600; white-space: nowrap }
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px }
+.glance div { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 2px; text-align: center }
+.glance b { font: 700 1.5rem/1.1 var(--font-display, inherit); color: var(--accent) }
+.glance span { font-size: .85rem; color: var(--muted) }
+.rule-list { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 10px }
+.rule-list > li { position: relative; padding-left: 40px; line-height: 1.5 }
+.rule-list > li::before { content: attr(data-n); position: absolute; left: 0; top: 1px; width: 28px; height: 28px; border-radius: 50%; background: var(--btn); color: var(--btn-ink); font-weight: 700; font-size: .85rem; display: grid; place-items: center }
+.rule-list ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px }
 .join { gap: 14px }
 .join p, .join ul { margin: 0 }
 .join h3 { margin-top: 10px }
@@ -173,8 +184,9 @@ footer a { color: inherit }
       <a href="#home">Home</a>
       <a href="#table">Table</a>
       <a href="#fixtures">Fixtures<span class="long"> &amp; results</span></a>
-      <a href="#send">Send score</a>
+      <a href="#send">Send<span class="xlong"> score</span></a>
       <a href="#questions">Questions</a>
+      <a href="#rules">Rules</a>
       <a href="#join">Join</a>
     </nav>
   </div>
@@ -256,6 +268,60 @@ footer a { color: inherit }
     </article>
   </section>
 
+  <section class="view" id="view-rules" hidden>
+    <article class="card rules">
+      <h2>League rules</h2>
+      <div class="glance">
+        <div><b>£10</b><span>per team, per season</span></div>
+        <div><b>6</b><span>players at most</span></div>
+        <div><b>9pm</b><span>Thursday start</span></div>
+        <div><b>30 + 30</b><span>questions a match</span></div>
+      </div>
+
+      <h3>Teams and entry</h3>
+      <ol class="rule-list">
+        <li>An entrance fee of <strong>£10 per team</strong> shall be paid at the start of the season. If at any time this does not seem sufficient, a further small sum may be levied.</li>
+        <li>Competing teams shall consist of <strong>no more than six players</strong> per side. Teams cannot change players during a match and no player may join the team after the match has been playing for ten minutes.</li>
+        <li>Teams that have no representative at the AGM, or have not contacted the organisers, will not be allowed to play in the following season.</li>
+      </ol>
+
+      <h3>Match night</h3>
+      <ol class="rule-list" start="4">
+        <li>The matches shall be played on <strong>Thursday evenings starting at 9.00 p.m.</strong> except where both teams agree to a later start.</li>
+        <li>Away teams are to collect that night’s questions from <strong>Chalkers at Newtown at 8:30 p.m.</strong></li>
+        <li>The questions shall be issued to the home team in sealed envelopes that will be opened by the question master in the presence of both teams. It is the responsibility of the home team to supply a question master. The away team may provide a scorer / timekeeper, if they wish.</li>
+      </ol>
+
+      <h3>The questions</h3>
+      <ol class="rule-list" start="7">
+        <li>Sets of questions shall be provided and no others shall be used.</li>
+        <li>No more than six questions can be on the same subject in any one match.</li>
+      </ol>
+
+      <h3>Playing the match</h3>
+      <ol class="rule-list" start="9">
+        <li>The match shall consist of <strong>thirty questions to each team</strong>. The toss of a coin will decide whether a team wishes to go first or second.</li>
+        <li>All questions to be answered jointly by the whole team. If no answer is given within <strong>thirty seconds</strong>, the timekeeper shall inform the team captain that their time is up, but still give them the opportunity to answer promptly.</li>
+        <li>The question master will award <strong>one point</strong> for a correct answer. Should a wrong answer be given, or the team fail to answer, the question will be offered to the opposing team. The captain must answer within <strong>ten seconds</strong> and the question master will award <strong>one bonus point</strong> for a correct answer.</li>
+      </ol>
+
+      <h3>Disputed questions</h3>
+      <ol class="rule-list" start="12">
+        <li>If there is a dispute to the validity of a question (i.e. the answer written down is considered incorrect):
+          <ul>
+            <li>If a team gives an answer that is the same as the supplied answer then that team may have the points no matter how incorrect the answer may seem.</li>
+            <li>A spare will be used if the question is not viable, i.e. unreadable, missing or the question person reads the answer out by mistake, etc.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h3>Results and the table</h3>
+      <ol class="rule-list" start="13">
+        <li>The home team of each match must send the result through to the organisers using the website. This also applies to Knockout/Plate matches. <a href="#send">Send a score →</a></li>
+        <li>If at the end of the season two teams have equal points, then to decide who is higher the two results of when they played each other is compared. If that is a draw then the number of points scored by each team when they played each other will be compared. If these are equal then the number of points scored during the season will be compared.</li>
+      </ol>
+    </article>
+  </section>
   <section class="view" id="view-join" hidden>
     <article class="card join">
       <h2>Join the league</h2>
@@ -552,11 +618,12 @@ async function showSearch(weeks) {
 
 function route() {
   const [name, arg] = (location.hash || '#home').slice(1).split('/');
-  const view = ['home', 'table', 'fixtures', 'send', 'questions', 'join'].includes(name) ? name : 'home';
+  const view = ['home', 'table', 'fixtures', 'send', 'questions', 'rules', 'join'].includes(name) ? name : 'home';
   if (view === 'questions' && league) renderQuestions(Number(arg));
-  // The Join page is plain text, so it shows even if the league sheet hasn't loaded.
-  document.querySelectorAll('section.view').forEach(s => { s.hidden = s.id !== 'view-' + view || (!league && view !== 'join'); });
-  if (view === 'join') $('status').hidden = true; else if (!league) $('status').hidden = false;
+  // The Rules and Join pages are plain text, so they show even if the league sheet hasn't loaded.
+  const plain = view === 'join' || view === 'rules';
+  document.querySelectorAll('section.view').forEach(s => { s.hidden = s.id !== 'view-' + view || (!league && !plain); });
+  if (plain) $('status').hidden = true; else if (!league) $('status').hidden = false;
   document.querySelectorAll('nav.tabs a').forEach(a => { if (a.getAttribute('href') === '#' + view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   if (view === 'fixtures' && league && !route.scrolled) {
     route.scrolled = true;
@@ -564,6 +631,7 @@ function route() {
   }
 }
 window.addEventListener('hashchange', route);
+document.querySelectorAll('.rule-list').forEach(ol => [...ol.children].forEach((li, i) => { li.dataset.n = (ol.start || 1) + i; }));
 load().then(route);
 </script>
 </html>
