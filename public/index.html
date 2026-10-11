@@ -162,7 +162,8 @@ form.send { display: grid; gap: 16px }
   .q-table td.q-w { grid-column: 1 / -1; width: auto }
   .q-hidden .q-a { display: none }
 }
-.q-link { color: var(--accent); font-weight: 600; text-decoration: none; white-space: nowrap }
+.q-link { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; margin-left: 6px }
+.q-link:hover { text-decoration: underline }
 footer { text-align: center; color: var(--muted); font-size: .85rem; padding-bottom: 28px }
 footer a { color: inherit }
 .credit a { text-decoration: none; display: inline-flex; align-items: center; gap: 5px }
@@ -419,7 +420,8 @@ function matchRows(matches, team) {
   }).join('') + '</ul>';
 }
 
-const setterLine = w => w.setter ? `<div class="setter"><span aria-hidden="true">✎</span><span>Questions set by <b>${esc(w.setter)}</b></span></div>` : '';
+const qLink = w => questionsFor(w) ? ` <a class="q-link" href="#questions/${w.week}">Questions →</a>` : '';
+const setterLine = w => w.setter ? `<div class="setter"><span aria-hidden="true">✎</span><span>Questions set by <b>${esc(w.setter)}</b>${qLink(w)}</span></div>` : '';
 
 function tableHtml(rows, compact) {
   const head = `<tr><th>#</th><th class="team">Team</th><th>P</th><th class="${compact ? 'wide' : ''}">W</th><th class="${compact ? 'wide' : ''}">D</th><th class="${compact ? 'wide' : ''}">L</th><th>For</th><th class="wide">Ag</th>${compact ? '' : '<th class="wide">Form</th>'}<th>Pts</th></tr>`;
@@ -455,8 +457,8 @@ function renderWeeks() {
     const body = matches.length ? matchRows(matches, team) : (setting ? '' : '<p class="muted" style="margin:0">Not playing this week.</p>');
     const tag = w.week === league.nextWeek ? '<span class="pill">Next</span>' : '';
     return `<article class="card week${w.week === league.nextWeek ? ' next' : ''}" id="week-${w.week}">
-      <div class="card-head"><h3>Week ${w.week} · ${day(w.date)}</h3>${tag}${questionsFor(w) ? `<a class="q-link" href="#questions/${w.week}">Questions →</a>` : ''}</div>
-      ${setting ? `<div class="setter"><span aria-hidden="true">✎</span><span><b>${esc(team)}</b> are setting the questions this week</span></div>` : (team ? '' : setterLine(w))}
+      <div class="card-head"><h3>Week ${w.week} · ${day(w.date)}</h3>${tag}</div>
+      ${setting ? `<div class="setter"><span aria-hidden="true">✎</span><span><b>${esc(team)}</b> are setting the questions this week${qLink(w)}</span></div>` : (team ? '' : setterLine(w))}
       ${body}</article>`;
   }).join('');
 }
