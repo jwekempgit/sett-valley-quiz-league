@@ -162,8 +162,8 @@ form.send { display: grid; gap: 16px }
   .q-table td.q-w { grid-column: 1 / -1; width: auto }
   .q-hidden .q-a { display: none }
 }
-.q-link { color: var(--accent); font-weight: 700; text-decoration: none; white-space: nowrap; margin-left: 6px }
-.q-link:hover { text-decoration: underline }
+.q-link { color: var(--accent); display: inline-flex; vertical-align: middle; margin-left: 6px; padding: 3px; border-radius: 6px }
+.q-link:hover { background: color-mix(in srgb, var(--accent) 15%, transparent) }
 footer { text-align: center; color: var(--muted); font-size: .85rem; padding-bottom: 28px }
 footer a { color: inherit }
 .credit a { text-decoration: none; display: inline-flex; align-items: center; gap: 5px }
@@ -420,7 +420,8 @@ function matchRows(matches, team) {
   }).join('') + '</ul>';
 }
 
-const qLink = w => questionsFor(w) ? ` <a class="q-link" href="#questions/${w.week}">Questions →</a>` : '';
+const EYE = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const qLink = w => questionsFor(w) ? ` <a class="q-link" href="#questions/${w.week}" title="See the questions" aria-label="See week ${w.week} questions">${EYE}</a>` : '';
 const setterLine = w => w.setter ? `<div class="setter"><span aria-hidden="true">✎</span><span>Questions set by <b>${esc(w.setter)}</b>${qLink(w)}</span></div>` : '';
 
 function tableHtml(rows, compact) {
