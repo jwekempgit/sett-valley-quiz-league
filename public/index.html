@@ -126,6 +126,11 @@ form.send { display: grid; gap: 16px }
 .ticks li::marker { color: var(--accent) }
 .q-pick { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
 .q-pick select { flex: 1 1 220px }
+.q-searchrow { display: flex; gap: 8px; align-items: center; position: relative }
+.q-info summary { list-style: none; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); font: 700 15px/24px Georgia, serif; font-style: italic; text-align: center; flex: none }
+.q-info summary::-webkit-details-marker { display: none }
+.q-info[open] summary { background: var(--accent); color: var(--surface) }
+.q-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 5; width: min(340px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; box-shadow: 0 8px 24px rgb(0 0 0 / .15); font-size: .92rem; line-height: 1.45 }
 .q-search { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: inherit }
 .q-table .q-w { white-space: nowrap; width: 5.5em }
 .q-table .q-w a { color: var(--accent); font-weight: 600; text-decoration: none }
@@ -499,13 +504,19 @@ function renderQuestions(wanted) {
   if (!weeks.length) { $('q-body').innerHTML = '<p class="muted" style="margin:0">No question sets yet.</p>'; return; }
   const w = weeks.find(x => x.week === wanted) || weeks[0];
   const term = $('q-search')?.value || '';
-  $('q-body').innerHTML = `<input type="search" id="q-search" class="q-search" placeholder="Search every week’s questions and answers" aria-label="Search questions" value="${esc(term)}">
+  $('q-body').innerHTML = `<div class="q-searchrow">
+      <input type="search" id="q-search" class="q-search" placeholder="Search all weeks" aria-label="Search questions" value="${esc(term)}">
+      <details class="q-info"><summary aria-label="How search works">i</summary>
+        <div class="q-pop">Type a word to see every question, from every week, with that word in the question or the answer. Tap a week to open its full set; clear the box to go back.<br><br>Search matches the start of words, so “olivia” finds Olivia Dean but not Bolivia, and “olymp” finds Olympics. Capitals and accents don’t matter, so “pele” finds Pelé.</div>
+      </details>
+    </div>
     <div class="q-pick">
       <select id="q-week" aria-label="Week">${weeks.map(x => `<option value="${x.week}"${x === w ? ' selected' : ''}>Week ${x.week} · ${day(x.date)}${x.setter ? ' · set by ' + esc(x.setter) : ''}</option>`).join('')}</select>
       <label class="q-toggle"><input type="checkbox" id="q-hide"> Hide answers</label>
     </div><div id="q-sets"></div>`;
   $('q-week').addEventListener('change', e => { $('q-search').value = ''; location.hash = 'questions/' + e.target.value; });
   $('q-hide').addEventListener('change', e => $('q-sets').classList.toggle('q-hidden', e.target.checked));
+  if (!renderQuestions.bound) renderQuestions.bound = document.addEventListener('click', e => { const d = document.querySelector('.q-info[open]'); if (d && !d.contains(e.target)) d.open = false; }) || true;
   let timer;
   $('q-search').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => $('q-search').value.trim().length >= 2 ? showSearch(weeks) : showWeek(w), 200); });
   term.trim().length >= 2 ? showSearch(weeks) : showWeek(w);
