@@ -126,11 +126,22 @@ form.send { display: grid; gap: 16px }
 .ticks li::marker { color: var(--accent) }
 .q-pick { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
 .q-pick select { flex: 1 1 220px }
-.q-frame { width: 100%; height: 75vh; border: 1px solid var(--line); border-radius: 10px; background: #fff }
-.q-img { width: 100%; height: auto; border-radius: 10px; display: block }
-.q-pick .btn { text-decoration: none; display: inline-flex; align-items: center }
+.q-toggle { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; white-space: nowrap }
+.q-h { margin: 14px 0 4px; font-size: 1.05rem }
+.q-table { width: 100%; border-collapse: collapse }
+.q-table th, .q-table td { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top }
+.q-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700 }
+.q-table .q-n { width: 2.2em; color: var(--muted); font-variant-numeric: tabular-nums }
+.q-table td.q-a { font-weight: 600; width: 34% }
+.q-hidden .q-a { visibility: hidden }
+@media (max-width: 600px) {
+  .q-table thead { display: none }
+  .q-table tr { display: grid; grid-template-columns: 2em 1fr; border-bottom: 1px solid var(--line); padding: 8px 0 }
+  .q-table td { border: 0; padding: 2px 4px }
+  .q-table td.q-a { grid-column: 2; width: auto; color: var(--accent) }
+  .q-hidden .q-a { display: none }
+}
 .q-link { color: var(--accent); font-weight: 600; text-decoration: none; white-space: nowrap }
-@media (max-width: 700px) { .q-frame { display: none } }
 footer { text-align: center; color: var(--muted); font-size: .85rem; padding-bottom: 28px }
 footer a { color: inherit }
 .credit a { text-decoration: none; display: inline-flex; align-items: center; gap: 5px }
@@ -230,7 +241,7 @@ footer a { color: inherit }
   <section class="view" id="view-questions" hidden>
     <article class="card">
       <div class="card-head"><h2>Questions</h2></div>
-      <p class="muted" style="margin:0">Each week’s 60 questions, added the day after the matches are played.</p>
+      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added the day after the matches are played.</p>
       <div id="q-body"></div>
     </article>
   </section>
@@ -461,19 +472,29 @@ $('send-form').addEventListener('submit', async e => {
 });
 
 /* Tabs */
-function renderQuestions(wanted) {
+const questionCache = {};
+async function renderQuestions(wanted) {
   const weeks = league.weeks.filter(questionsFor).reverse();
   if (!weeks.length) { $('q-body').innerHTML = '<p class="muted" style="margin:0">No question sets yet.</p>'; return; }
   const w = weeks.find(x => x.week === wanted) || weeks[0];
-  const url = questionsFor(w);
-  const ext = url.split('.').pop().toLowerCase();
-  const view = ext === 'pdf' ? `<iframe class="q-frame" src="${url}" title="Week ${w.week} questions"></iframe>`
-    : ['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(ext) ? `<img class="q-img" src="${url}" alt="Week ${w.week} questions">` : '';
   $('q-body').innerHTML = `<div class="q-pick">
       <select id="q-week" aria-label="Week">${weeks.map(x => `<option value="${x.week}"${x === w ? ' selected' : ''}>Week ${x.week} · ${day(x.date)}${x.setter ? ' · set by ' + esc(x.setter) : ''}</option>`).join('')}</select>
-      <a class="btn" href="${url}" target="_blank" rel="noopener">Open questions</a>
-    </div>${view}`;
+      <label class="q-toggle"><input type="checkbox" id="q-hide"> Hide answers</label>
+    </div><div id="q-sets"><p class="muted" style="margin:0">Loading…</p></div>`;
   $('q-week').addEventListener('change', e => { location.hash = 'questions/' + e.target.value; });
+  $('q-hide').addEventListener('change', e => $('q-sets').classList.toggle('q-hidden', e.target.checked));
+  let set = questionCache[w.date];
+  if (!set) {
+    set = await fetch(questionsFor(w)).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (set) questionCache[w.date] = set;
+  }
+  if (!$('q-sets') || Number($('q-week').value) !== w.week) return;
+  if (!set) { $('q-sets').innerHTML = '<p class="muted" style="margin:0">Couldn’t load these questions. Please try again.</p>'; return; }
+  const rows = (list, numbered) => list.map((q, i) => `<tr><td class="q-n">${numbered ? q.n : i + 1}</td><td class="q-q">${esc(q.q)}</td><td class="q-a">${esc(q.a)}</td></tr>`).join('');
+  const block = (title, list, numbered) => list?.length ? `<h3 class="q-h">${title}</h3>
+    <table class="q-table"><thead><tr><th class="q-n">#</th><th class="q-q">Question</th><th class="q-a">Answer</th></tr></thead><tbody>${rows(list, numbered)}</tbody></table>` : '';
+  $('q-sets').innerHTML = set.halves.map(h => block(esc(h.title), h.questions, true) + block(esc(h.title) + ' spares', h.spares, false)).join('')
+    + block('Spares', set.spares, false);
 }
 
 function route() {
