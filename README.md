@@ -24,7 +24,7 @@ The sheet must stay shared as **Anyone with the link can view**, which is how th
 
 ### What the site writes
 
-When someone sends a score, the Apps Script finds that week's tab (named like `08-10-2026`), finds the row for the match, and fills in the home score (B), the away score (C) and who went first (H, `Home` or `Away`). All Scores and the table then update on their own. Every score sent is also listed on a **Website Results** tab, with who sent it and what the score was before.
+When someone sends a score, the Apps Script finds that week's tab (named like `08-10-2026`), finds the row for the match, and fills in the home score (B), the away score (C) and who went first (H, `Home` or `Away`). All Scores and the table then update on their own. If that match's score cells on All Scores have been typed over, the script puts their links to the week tab back, so a score sent from the site always shows up. Every score sent is also listed on a **Website Results** tab, with who sent it and what the score was before.
 
 ## One-time setup
 

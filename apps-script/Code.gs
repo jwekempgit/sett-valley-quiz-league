@@ -7,6 +7,7 @@
  *
  * What it writes: on the week's tab (named dd-mm-yyyy), in the row for the match, the home
  * score in column B, the away score in column C and who went first ("Home"/"Away") in column H.
+ * If the matching All Scores cells have been typed over, it puts their links to the week tab back.
  * Every score sent is also listed on a "Website Results" tab.
  */
 
@@ -49,6 +50,7 @@ function doPost(e) {
       const before = sheet.getRange(i + 1, 2, 1, 2).getValues()[0];
       sheet.getRange(i + 1, 2, 1, 2).setValues([[homeScore, awayScore]]);
       sheet.getRange(i + 1, 8).setValue(req.wentFirst);
+      relinkAllScores_(ss, sheet.getName(), i + 1);
       SpreadsheetApp.flush();
 
       log_(ss, [new Date(), req.tab, req.home, homeScore, awayScore, req.away, req.wentFirst, who, before[0] + ' v ' + before[1]]);
@@ -127,6 +129,23 @@ function tooManyTries_() {
 function countFailure_() {
   const cache = CacheService.getScriptCache();
   cache.put('fails', String(Number(cache.get('fails') || 0) + 1), 600);
+}
+
+// The website reads scores from All Scores, which links to each week tab. If someone has typed over one of
+// those links, a score sent here never reaches the website, so put the link back for this match's two scores.
+function relinkAllScores_(ss, tab, row) {
+  const sheet = ss.getSheetByName('All Scores');
+  if (!sheet || sheet.getLastRow() < 3) return;
+  const range = sheet.getRange(3, 2, sheet.getLastRow() - 2, 8); // B (home team) to I (away score)
+  const formulas = range.getFormulas();
+  const ref = "='" + tab + "'!";
+  const plain = f => String(f).replace(/[$\s]/g, '');
+  const r = formulas.findIndex(f => plain(f[0]) === ref + 'A' + row);
+  if (r < 0) return;
+  const links = [[1, 'B'], [7, 'C']]; // All Scores C ← week tab B (home score), All Scores I ← week tab C (away score)
+  for (const [col, from] of links) {
+    if (plain(formulas[r][col]) !== ref + from + row) range.getCell(r + 1, col + 1).setFormula(ref + from + row);
+  }
 }
 
 function log_(ss, row) {
