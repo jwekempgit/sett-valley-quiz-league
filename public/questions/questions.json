@@ -2,6 +2,8 @@
   "_about": "Question sets for each week. Key: the match date (yyyy-mm-dd). Value: that week's questions file in this folder. Each set shows on the site from the day after the matches.",
   "sets": {
     "2026-10-01": "2026-10-01.json",
-    "2026-10-08": "2026-10-08.json"
+    "2026-10-08": "2026-10-08.json",
+    "2026-10-15": "2026-10-15.json",
+    "2026-10-22": "2026-10-22.json"
   }
 }
