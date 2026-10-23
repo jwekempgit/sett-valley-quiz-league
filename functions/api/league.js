@@ -1,4 +1,4 @@
-import { SHEET_ID, TABS, csvUrl, buildLeague } from '../../lib/league.js';
+import { SHEET_ID, TABS, WEEK_RANGE, csvUrl, buildLeague, addWentFirst } from '../../lib/league.js';
 
 // GET /api/league: table, weeks, last and next game, read live from the Google Sheet.
 // Cached for a minute at Cloudflare so a busy night doesn't hammer Google; ?fresh=1 skips the cache (used straight after a score is sent).
@@ -28,7 +28,12 @@ export async function onRequestGet({ request, env, waitUntil }) {
 export async function loadLeague(env) {
   const id = env.SHEET_ID || SHEET_ID;
   const [scores, questions] = await Promise.all([fetchTab(id, TABS.scores, env), fetchTab(id, TABS.questions, env)]);
-  return { ...buildLeague(scores, questions, londonToday()), updated: new Date().toISOString() };
+  const league = buildLeague(scores, questions, londonToday());
+  // Who went first: one small read per week that has a score in. A week tab that can't be read just shows no marker.
+  const played = league.weeks.filter(w => w.matches.some(m => m.played));
+  const tabs = await Promise.all(played.map(w => fetchTab(id, { tab: w.tab, range: WEEK_RANGE }, env).catch(() => '')));
+  addWentFirst(league.weeks, Object.fromEntries(played.map((w, i) => [w.tab, tabs[i]])));
+  return { ...league, updated: new Date().toISOString() };
 }
 
 // SHEET_BASE_URL is only for testing against a stand-in for Google.

@@ -78,9 +78,12 @@ h3 { font: 600 1.1rem/1.3 var(--font-display); margin: 0 }
 .matches li { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line) }
 .matches li:first-child { border-top: 0 }
 .matches .home { text-align: right }
+.matches .home, .matches .away { display: flex; align-items: center; gap: 6px }
+.matches .home { justify-content: flex-end }
 .matches .score { font: 600 1.05rem var(--font-display); font-variant-numeric: tabular-nums; min-width: 4.6em; text-align: center; padding: 2px 8px; border-radius: 6px; background: var(--bg) }
 .matches .score.vs { font-family: var(--font-body); font-weight: 400; color: var(--muted); background: none }
 .matches .won { font-weight: 700 }
+.matches .first { display: inline-block; font: 700 .68rem var(--font-body); letter-spacing: .03em; color: var(--accent); border: 1px solid currentColor; border-radius: 4px; padding: 0 3px; flex: none }
 .hl { background: var(--accent-soft); border-radius: 4px; padding-inline: 4px; margin-inline: -4px }
 
 /* League table */
@@ -416,7 +419,8 @@ function matchRows(matches, team) {
     const score = m.played
       ? `<span class="score" aria-label="${m.homeScore} to ${m.awayScore}">${m.homeScore} – ${m.awayScore}</span>`
       : '<span class="score vs">v</span>';
-    return `<li><span class="home${hw ? ' won' : ''}"><span class="${mark(m.home)}">${esc(m.home)}</span></span>${score}<span class="away${aw ? ' won' : ''}"><span class="${mark(m.away)}">${esc(m.away)}</span></span></li>`;
+    const first = side => m.first === side ? '<span class="first" title="Went first" aria-label="(went first)">1st</span>' : '';
+    return `<li><span class="home${hw ? ' won' : ''}"><span class="${mark(m.home)}">${esc(m.home)}</span>${first('home')}</span>${score}<span class="away${aw ? ' won' : ''}">${first('away')}<span class="${mark(m.away)}">${esc(m.away)}</span></span></li>`;
   }).join('') + '</ul>';
 }
 

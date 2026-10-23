@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { buildLeague, checkScores, isoDate, parseCsv } from '../lib/league.js';
+import { addWentFirst, buildLeague, checkScores, isoDate, parseCsv } from '../lib/league.js';
 
 const scores = readFileSync(new URL('./fixtures/all-scores.csv', import.meta.url), 'utf8');
 const questions = readFileSync(new URL('./fixtures/questions.csv', import.meta.url), 'utf8');
@@ -60,4 +60,12 @@ test('helpers', () => {
   assert.ok(checkScores(40, 25));
   assert.ok(checkScores(0, 0));
   assert.ok(checkScores(2.5, 3));
+});
+
+test('who went first comes from the week tab', () => {
+  const l = buildLeague(scores, questions, '2026-10-08');
+  const tab = '"Sportsman","30","25","Lodgers","Date","","","Away"\n"Kinder Lodge","32","14","Shepherds","","","","Home"\n"Hare & Hounds","21","30","Papermill","","","","Home or Away"\n';
+  addWentFirst(l.weeks, { '01-10-2026': tab });
+  assert.deepEqual(l.weeks[0].matches.map(m => m.first), ['away', 'home', undefined, undefined]);
+  assert.equal(l.weeks[1].matches[0].first, undefined);
 });
