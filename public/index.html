@@ -79,6 +79,21 @@ body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) }
 .seg button { font: 600 .95rem var(--font-body); border: 0; border-radius: 999px; padding: 7px 16px; background: none; color: var(--ink); cursor: pointer }
 .seg button[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink) }
 table.league tr.mine td { background: var(--accent-soft) }
+/* Home panels, in the order picked in Settings. Next game and Last results sit side by side on wide screens when they're next to each other. */
+.home-panels { display: grid; gap: 18px }
+@media (min-width: 760px) { .home-panels { grid-template-columns: 1fr 1fr } .home-panels > * { grid-column: 1 / -1 } .home-panels > .half { grid-column: auto } }
+.set-list { list-style: none; margin: 0; padding: 0; display: grid }
+.set-list li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px 12px; padding: 10px 0; border-top: 1px solid var(--line) }
+.set-list li:first-child { border-top: 0 }
+.set-list li.off > :not(.set-on) { opacity: .45 }
+.set-list label { display: flex; align-items: center; gap: 8px; font-weight: 600 }
+.set-list .seg { grid-row: 2; margin-left: 28px }
+.set-mv { grid-column: 2; grid-row: 1 }
+.set-list input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent) }
+.set-list .seg button { padding: 4px 12px; font-size: .88rem }
+.set-mv { display: flex; gap: 4px }
+.set-mv button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 1rem; cursor: pointer }
+.set-mv button[disabled] { opacity: .3; cursor: default }
 /* Home: your team, and its fixtures */
 .my-team { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; background: var(--head); color: var(--head-ink); border-radius: 12px; padding: 10px 16px }
 .my-team b { color: var(--brand); font: 700 1.1rem var(--font-display) }
@@ -233,15 +248,16 @@ footer a { color: inherit }
 
   <section class="view" id="view-home" hidden>
     <div id="my-team"></div>
-    <article class="card" id="my-fx" hidden></article>
-    <div class="grid2">
-      <article class="card" id="next-card"></article>
-      <article class="card" id="last-card"></article>
+    <div class="home-panels" id="home-panels">
+      <article class="card" id="my-fx" data-panel="myfx" hidden></article>
+      <article class="card" id="next-card" data-panel="next"></article>
+      <article class="card" id="last-card" data-panel="last"></article>
+      <article class="card" data-panel="table">
+        <div class="card-head"><h2>League table</h2><a href="#table" class="small">Full table</a></div>
+        <div class="table-wrap" id="home-table"></div>
+      </article>
     </div>
-    <article class="card">
-      <div class="card-head"><h2>League table</h2><a href="#table" class="small">Full table</a></div>
-      <div class="table-wrap" id="home-table"></div>
-    </article>
+    <p class="small muted" style="margin:0;text-align:center">Choose what shows here in <a href="#settings" style="color:var(--accent);font-weight:600">Settings</a>.</p>
   </section>
 
   <section class="view" id="view-table" hidden>
@@ -377,6 +393,12 @@ footer a { color: inherit }
       <h3>Your team</h3>
       <p class="small muted">Picks out your team on Home, in the table and in the fixtures, and shows just your team’s fixtures to start with.</p>
       <select id="set-team" aria-label="Your team"><option value="">No team</option></select>
+    </article>
+    <article class="card set-card">
+      <h3>Home page</h3>
+      <p class="small muted">Tick what you want on Home and use the arrows to put it in order. Compact is a short panel; Full shows everything.</p>
+      <ul class="set-list" id="set-home"></ul>
+      <div><button class="btn ghost" type="button" id="set-home-reset">Back to the standard Home</button></div>
     </article>
     <article class="card set-card">
       <h3>Light or dark</h3>
@@ -523,7 +545,8 @@ function render() {
     : '<span class="pill">Last results</span><h2>No results yet</h2><p class="muted" style="margin:0">Results appear here once the first scores are in.</p>';
 
   renderMyTeam();
-  $('home-table').innerHTML = tableHtml(league.table, true);
+  arrangeHome();
+  $('home-table').innerHTML = tableHtml(league.table, !homePrefs().full.table);
   $('full-table').innerHTML = tableHtml(league.table, false);
 
   const filter = $('team-filter');
@@ -635,8 +658,37 @@ $('send-form').addEventListener('submit', async e => {
   }
 });
 
+/* Home panels: which show, in what order, compact or full (saved on the device) */
+const HOME_PANELS = [
+  { k: 'myfx', label: 'My fixtures', size: true },
+  { k: 'next', label: 'Next games' },
+  { k: 'last', label: 'Last results' },
+  { k: 'table', label: 'League table', size: true },
+];
+function homePrefs() {
+  const d = { order: HOME_PANELS.map(x => x.k), on: { myfx: true, next: true, last: true, table: true }, full: { myfx: false, table: false } };
+  let p = null;
+  try { p = JSON.parse(store.get('svql-home')) } catch {}
+  if (!p || !Array.isArray(p.order)) return d;
+  const order = p.order.filter(k => d.order.includes(k));
+  d.order.forEach(k => { if (!order.includes(k)) order.push(k); });
+  return { order, on: { ...d.on, ...p.on }, full: { ...d.full, ...p.full } };
+}
+function arrangeHome() {
+  const p = homePrefs(), box = $('home-panels');
+  const shown = p.order.filter(k => p.on[k] && (k !== 'myfx' || myTeam()));
+  p.order.forEach(k => box.appendChild(box.querySelector(`[data-panel="${k}"]`)));
+  box.querySelectorAll('[data-panel]').forEach(el => {
+    const k = el.dataset.panel, i = shown.indexOf(k);
+    el.hidden = i < 0;
+    // Next game and Last results pair up when they sit next to each other.
+    const pair = { next: 'last', last: 'next' }[k];
+    el.classList.toggle('half', !!pair && (shown[i - 1] === pair || shown[i + 1] === pair));
+  });
+}
+
 /* Home: pick your team, then see its fixtures */
-let myFxOpen = false;
+let myFxOpen = null;    // null: as set in Settings (compact or full) until the button is pressed
 function renderMyTeam() {
   const team = myTeam();
   $('my-team').innerHTML = team
@@ -645,8 +697,8 @@ function renderMyTeam() {
         <select id="pick-team" aria-label="Your team"><option value="">Choose a team…</option>${league.teams.map(t => `<option>${esc(t)}</option>`).join('')}</select></article>`;
   if (!team) $('pick-team').addEventListener('change', e => setMyTeam(e.target.value));
   const fx = $('my-fx');
-  fx.hidden = !team;
   if (!team) return;
+  const open = myFxOpen ?? homePrefs().full.myfx;
   const today = todayIso();
   // One line per week the team plays or sets the questions.
   const rows = league.weeks.map(w => {
@@ -654,7 +706,7 @@ function renderMyTeam() {
     return m || w.setter === team ? { w, m } : null;
   }).filter(Boolean);
   const upcoming = rows.filter(r => league.nextWeek ? r.w.week >= league.nextWeek : r.w.date >= today);
-  const shown = myFxOpen ? rows : upcoming.slice(0, 3);
+  const shown = open ? rows : upcoming.slice(0, 3);
   const line = ({ w, m }) => {
     const d = `<span class="d">${day(w.date)}</span>`;
     if (!m) return `<li>${d}<span class="set">Setting the questions</span><span></span></li>`;
@@ -667,15 +719,16 @@ function renderMyTeam() {
     }
     return `<li${w.week === league.nextWeek ? ' class="next"' : ''}>${d}<span><span class="ha" title="${home ? 'Home' : 'Away'}">${home ? 'H' : 'A'}</span><span class="opp">${esc(opp)}</span></span>${res}</li>`;
   };
-  fx.innerHTML = `<div class="card-head"><h2>My fixtures</h2><span class="small muted">${myFxOpen ? 'Whole season' : 'Next few'}</span></div>
+  fx.innerHTML = `<div class="card-head"><h2>My fixtures</h2><span class="small muted">${open ? 'Whole season' : 'Next few'}</span></div>
     ${shown.length ? `<ul class="myfx">${shown.map(line).join('')}</ul>` : '<p class="muted" style="margin:0">No more fixtures this season.</p>'}
-    <div><button class="btn ghost" type="button" id="my-fx-more">${myFxOpen ? 'Show fewer' : 'Show all fixtures'}</button></div>`;
-  $('my-fx-more').addEventListener('click', () => { myFxOpen = !myFxOpen; renderMyTeam(); });
+    <div><button class="btn ghost" type="button" id="my-fx-more">${open ? 'Show fewer' : 'Show all fixtures'}</button></div>`;
+  $('my-fx-more').addEventListener('click', () => { myFxOpen = !open; renderMyTeam(); });
 }
 function setMyTeam(t) {
   store.set('svql-team', t);
   $('team-filter').value = myTeam();
   render();
+  renderSettings();
 }
 
 /* Settings */
@@ -684,6 +737,13 @@ function renderSettings() {
   if (league && sel.options.length === 1) sel.insertAdjacentHTML('beforeend', league.teams.map(t => `<option>${esc(t)}</option>`).join(''));
   sel.disabled = !league;
   sel.value = myTeam();
+  const p = homePrefs();
+  $('set-home').innerHTML = p.order.map((k, i) => {
+    const x = HOME_PANELS.find(y => y.k === k), on = !!p.on[k], fl = !!p.full[k];
+    return `<li class="${on ? '' : 'off'}"><label class="set-on"><input type="checkbox" data-set-on="${k}"${on ? ' checked' : ''}>${x.label}${k === 'myfx' && !myTeam() ? ' <span class="small muted" style="font-weight:400">(choose your team first)</span>' : ''}</label>
+      ${x.size ? `<span class="seg" role="group" aria-label="${x.label} size"><button type="button" data-set-size="${k}" data-full="0" aria-pressed="${!fl}">Compact</button><button type="button" data-set-size="${k}" data-full="1" aria-pressed="${fl}">Full</button></span>` : ''}
+      <span class="set-mv"><button type="button" data-set-mv="${k}" data-d="-1" aria-label="Move ${x.label} up"${i ? '' : ' disabled'}>↑</button><button type="button" data-set-mv="${k}" data-d="1" aria-label="Move ${x.label} down"${i < p.order.length - 1 ? '' : ' disabled'}>↓</button></span></li>`;
+  }).join('');
   const theme = store.get('svql-theme') || 'auto';
   $('set-theme').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.theme === theme)));
   const code = store.get('svql-code');
@@ -691,6 +751,30 @@ function renderSettings() {
   $('set-code-forget').hidden = !code;
 }
 $('set-team').addEventListener('change', e => setMyTeam(e.target.value));
+$('set-home').addEventListener('click', e => {
+  const b = e.target.closest('button, input'); if (!b) return;
+  const p = homePrefs();
+  if (b.dataset.setOn) p.on[b.dataset.setOn] = b.checked;
+  else if (b.dataset.setSize) { p.full[b.dataset.setSize] = b.dataset.full === '1'; if (b.dataset.setSize === 'myfx') myFxOpen = null; }
+  else if (b.dataset.setMv) {
+    const i = p.order.indexOf(b.dataset.setMv), j = i + Number(b.dataset.d);
+    if (j < 0 || j >= p.order.length) return;
+    [p.order[i], p.order[j]] = [p.order[j], p.order[i]];
+  } else return;
+  store.set('svql-home', JSON.stringify(p));
+  if (league) render();
+  renderSettings();
+  // Keep focus on the control that was used, now redrawn.
+  const sel = b.dataset.setMv ? `[data-set-mv="${b.dataset.setMv}"][data-d="${b.dataset.d}"]` : b.dataset.setOn ? `[data-set-on="${b.dataset.setOn}"]` : `[data-set-size="${b.dataset.setSize}"][data-full="${b.dataset.full}"]`;
+  const f = $('set-home').querySelector(sel);
+  if (f && !f.disabled) f.focus({ preventScroll: true });
+});
+$('set-home-reset').addEventListener('click', () => {
+  try { localStorage.removeItem('svql-home') } catch {}
+  myFxOpen = null;
+  if (league) render();
+  renderSettings();
+});
 $('set-theme').addEventListener('click', e => {
   const b = e.target.closest('[data-theme]'); if (!b) return;
   const t = b.dataset.theme;
