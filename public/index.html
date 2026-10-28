@@ -63,7 +63,9 @@ body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) }
 @media (max-width: 380px) { .app-bar { left: max(6px, env(safe-area-inset-left, 0px)); right: max(6px, env(safe-area-inset-right, 0px)) } .app-bar a { font-size: .58rem; letter-spacing: 0 } .app-bar svg { width: 22px; height: 22px } }
 /* Extras: a tile for each of the other pages. */
 .xt-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px }
-@media (min-width: 760px) { .xt-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) } }
+@media (min-width: 760px) { .xt-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) } }
+/* Five tiles: on phones the League table goes across the top, full width. */
+@media (max-width: 759px) { .xt-grid .xt:first-child { grid-column: 1 / -1 } }
 .xt { border-radius: 16px; background: var(--head); color: #fff; text-decoration: none; padding: 18px 8px 14px; display: grid; justify-items: center; align-content: start; gap: 8px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,.18); transition: transform .12s }
 .xt:hover { transform: translateY(-2px) }
 .xt svg { width: 40px; height: 40px; color: var(--brand) }
@@ -342,12 +344,12 @@ footer a { color: inherit }
   <section class="view" id="view-extras" hidden>
     <h2>Extras</h2>
     <div class="xt-grid">
+      <a class="xt" href="#table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.5" width="18" height="17" rx="2.5"/><path d="M3 8.5h18M8 8.5v12M8 14.5h13"/></svg><b>League table</b><small>Every team, full stats</small></a>
       <a class="xt" href="#questions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.5-2.7 4.1"/><circle cx="12" cy="17.6" r=".6" fill="currentColor"/></svg><b>Questions</b><small>Every week’s set, with answers</small></a>
       <a class="xt" href="#rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H19v-3"/><path d="M8 7.5h7M8 11h7"/></svg><b>Rules</b><small>How a league match works</small></a>
       <a class="xt" href="https://docs.google.com/document/d/1iHI9IsOQKIqiYA7OPIyVOxJ2kH8b3GTRL_0YjwkkPho/export?format=pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg><b>Scoresheet</b><small>Download to print (PDF)</small></a>
       <a class="xt" href="#join"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9.5" cy="8" r="3.8"/><path d="M2.5 20.5c.6-3.8 3.4-6 7-6s6.4 2.2 7 6"/><path d="M19 8v6M16 11h6"/></svg><b>Join</b><small>New players, teams and venues</small></a>
     </div>
-    <p class="small muted" style="margin:0">The full league table is on <a href="#table" style="color:var(--accent);font-weight:600">its own page</a>, and on Home.</p>
   </section>
 
   <section class="view" id="view-settings" hidden>
@@ -722,8 +724,8 @@ function route() {
   if (view !== route.view) { route.view = view; scrollTo(0, 0); }
   document.querySelectorAll('section.view').forEach(s => { s.hidden = s.id !== 'view-' + view || (!league && !plain); });
   if (plain) $('status').hidden = true; else if (!league) $('status').hidden = false;
-  // Questions, Rules and Join live under Extras; the full table is reached from Home.
-  const tab = { table: 'home', questions: 'extras', rules: 'extras', join: 'extras' }[view] || view;
+  // The table, Questions, Rules and Join live under Extras.
+  const tab = { table: 'extras', questions: 'extras', rules: 'extras', join: 'extras' }[view] || view;
   document.querySelectorAll('#app-bar a').forEach(a => { if (a.dataset.app === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   if (view === 'fixtures' && league && !route.scrolled) {
     route.scrolled = true;
