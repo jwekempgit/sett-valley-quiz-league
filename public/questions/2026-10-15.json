@@ -264,7 +264,10 @@
     {
      "n": 45,
      "q": "What electrical property do germanium and silicon have in common?",
-     "a": "They are both semiconductors"
+     "a": "They are both semiconductors",
+     "u": [
+      "semiconductors"
+     ]
     },
     {
      "n": 46,
