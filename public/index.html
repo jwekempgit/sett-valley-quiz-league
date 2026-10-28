@@ -110,11 +110,16 @@ table.league tr.mine td { background: var(--accent-soft) }
 .myfx .res { display: flex; align-items: center; gap: 6px; font: 600 1rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap }
 .myfx .res i { font: 700 .7rem/18px var(--font-body); font-style: normal; width: 18px; text-align: center; border-radius: 4px; color: #fff }
 .myfx .res i.W { background: var(--win) } .myfx .res i.D { background: #8a8f8b } .myfx .res i.L { background: var(--loss) }
+.myq-next { margin: 0; font-weight: 600 }
+.myq-next b { color: var(--accent) }
+.myfx .q-go { color: var(--accent); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; font-size: .92rem }
 .myfx li.next { background: var(--accent-soft); border-radius: 8px; padding-inline: 8px; margin-inline: -8px; border-top-color: transparent }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
 main { padding-block: 20px 48px }
 section.view { display: grid; gap: 18px }
+section.view > *, .card > * { min-width: 0 }  /* let long drop-downs shrink to the screen instead of widening the page */
+.q-pick select { min-width: 0; max-width: 100% }
 h2 { font: 600 1.35rem/1.2 var(--font-display); margin: 0 }
 h3 { font: 600 1.1rem/1.3 var(--font-display); margin: 0 }
 .muted { color: var(--muted) }
@@ -215,6 +220,7 @@ form.send { display: grid; gap: 16px }
 .q-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700 }
 .q-table .q-n { width: 2.2em; color: var(--muted); font-variant-numeric: tabular-nums }
 .q-table td.q-a { font-weight: 600; width: 34% }
+.q-table td.q-a u, .card u { text-decoration-thickness: 2px; text-underline-offset: 3px }
 .q-hidden .q-a { visibility: hidden }
 @media (max-width: 600px) {
   .q-table thead { display: none }
@@ -253,6 +259,7 @@ footer a { color: inherit }
     <div id="my-team"></div>
     <div class="home-panels" id="home-panels">
       <article class="card" id="my-fx" data-panel="myfx" hidden></article>
+      <article class="card" id="my-q" data-panel="myq" hidden></article>
       <article class="card" id="next-card" data-panel="next"></article>
       <article class="card" id="last-card" data-panel="last"></article>
       <article class="card" data-panel="table">
@@ -318,7 +325,7 @@ footer a { color: inherit }
   <section class="view" id="view-questions" hidden>
     <article class="card">
       <div class="card-head"><h2>Questions</h2></div>
-      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added the day after the matches are played.</p>
+      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added the day after the matches are played. <u>Underlined</u> parts of an answer must be given in full.</p>
       <div id="q-body"></div>
     </article>
   </section>
@@ -546,6 +553,7 @@ function render() {
     : '<span class="pill">Last results</span><h2>No results yet</h2><p class="muted" style="margin:0">Results appear here once the first scores are in.</p>';
 
   renderMyTeam();
+  renderMyQuestions();
   arrangeHome();
   $('home-table').innerHTML = tableHtml(league.table, !homePrefs().full.table);
   $('full-table').innerHTML = tableHtml(league.table, false);
@@ -654,12 +662,13 @@ $('send-form').addEventListener('submit', async e => {
 /* Home panels: which show, in what order, compact or full (saved on the device) */
 const HOME_PANELS = [
   { k: 'myfx', label: 'My fixtures', size: true },
+  { k: 'myq', label: 'My team’s questions' },
   { k: 'next', label: 'Next games' },
   { k: 'last', label: 'Last results' },
   { k: 'table', label: 'League table', size: true },
 ];
 function homePrefs() {
-  const d = { order: HOME_PANELS.map(x => x.k), on: { myfx: true, next: true, last: true, table: true }, full: { myfx: false, table: false } };
+  const d = { order: HOME_PANELS.map(x => x.k), on: { myfx: true, myq: true, next: true, last: true, table: true }, full: { myfx: false, table: false } };
   let p = null;
   try { p = JSON.parse(store.get('svql-home')) } catch {}
   if (!p || !Array.isArray(p.order)) return d;
@@ -669,7 +678,7 @@ function homePrefs() {
 }
 function arrangeHome() {
   const p = homePrefs(), box = $('home-panels');
-  const shown = p.order.filter(k => p.on[k] && (k !== 'myfx' || myTeam()));
+  const shown = p.order.filter(k => p.on[k] && (!['myfx', 'myq'].includes(k) || myTeam()));
   p.order.forEach(k => box.appendChild(box.querySelector(`[data-panel="${k}"]`)));
   box.querySelectorAll('[data-panel]').forEach(el => {
     const k = el.dataset.panel, i = shown.indexOf(k);
@@ -717,6 +726,22 @@ function renderMyTeam() {
     <div><button class="btn ghost" type="button" id="my-fx-more">${open ? 'Show fewer' : 'Show all fixtures'}</button></div>`;
   $('my-fx-more').addEventListener('click', () => { myFxOpen = !open; renderMyTeam(); });
 }
+// The weeks your team sets the questions: when it's next, and links to the sets already out.
+function renderMyQuestions() {
+  const team = myTeam(), box = $('my-q');
+  if (!team) return;
+  const weeks = league.weeks.filter(w => w.setter === team);
+  const isNext = w => league.nextWeek ? w.week >= league.nextWeek : w.date >= todayIso();
+  const next = weeks.find(isNext);
+  const line = w => {
+    const link = questionsFor(w) ? `<a class="q-go" href="#questions/${w.week}">${EYE} See the questions</a>`
+      : `<span class="small muted">${isNext(w) ? 'Coming up' : 'Out soon'}</span>`;
+    return `<li${w === next ? ' class="next"' : ''}><span class="d">${day(w.date)}</span><span style="white-space:nowrap">Week ${w.week}</span>${link}</li>`;
+  };
+  box.innerHTML = `<div class="card-head"><h2>My team’s questions</h2></div>
+    <p class="myq-next">${next ? `${esc(team)} next set the questions <b>${next.date === todayIso() ? 'tonight' : longDay(next.date)}</b> (week ${next.week}).` : `${esc(team)} have no more weeks setting the questions this season.`}</p>
+    ${weeks.length ? `<ul class="myfx">${weeks.map(line).join('')}</ul>` : ''}`;
+}
 function setMyTeam(t) {
   store.set('svql-team', t);
   render();
@@ -732,7 +757,7 @@ function renderSettings() {
   const p = homePrefs();
   $('set-home').innerHTML = p.order.map((k, i) => {
     const x = HOME_PANELS.find(y => y.k === k), on = !!p.on[k], fl = !!p.full[k];
-    return `<li class="${on ? '' : 'off'}"><label class="set-on"><input type="checkbox" data-set-on="${k}"${on ? ' checked' : ''}>${x.label}${k === 'myfx' && !myTeam() ? ' <span class="small muted" style="font-weight:400">(choose your team first)</span>' : ''}</label>
+    return `<li class="${on ? '' : 'off'}"><label class="set-on"><input type="checkbox" data-set-on="${k}"${on ? ' checked' : ''}>${x.label}${['myfx', 'myq'].includes(k) && !myTeam() ? ' <span class="small muted" style="font-weight:400">(choose your team first)</span>' : ''}</label>
       ${x.size ? `<span class="seg" role="group" aria-label="${x.label} size"><button type="button" data-set-size="${k}" data-full="0" aria-pressed="${!fl}">Compact</button><button type="button" data-set-size="${k}" data-full="1" aria-pressed="${fl}">Full</button></span>` : ''}
       <span class="set-mv"><button type="button" data-set-mv="${k}" data-d="-1" aria-label="Move ${x.label} up"${i ? '' : ' disabled'}>↑</button><button type="button" data-set-mv="${k}" data-d="1" aria-label="Move ${x.label} down"${i < p.order.length - 1 ? '' : ' disabled'}>↓</button></span></li>`;
   }).join('');
@@ -796,7 +821,9 @@ function highlight(text, term) {
   return out + esc(text.slice(i));
 }
 const qTable = (body, extra = '') => `<table class="q-table"><thead><tr>${extra ? '<th class="q-w">Week</th>' : ''}<th class="q-n">#</th><th class="q-q">Question</th><th class="q-a">Answer</th></tr></thead><tbody>${body}</tbody></table>`;
-const qRow = (n, q, term, week = '') => `<tr>${week}<td class="q-n">${n}</td><td class="q-q">${highlight(q.q, term)}</td><td class="q-a">${highlight(q.a, term)}</td></tr>`;
+// The parts of an answer that must be given in full (underlined on the sheet), listed in the set's "u".
+const underline = (html, parts = []) => parts.reduce((h, u) => h.replace(esc(u), '<u>$&</u>'), html);
+const qRow = (n, q, term, week = '') => `<tr>${week}<td class="q-n">${n}</td><td class="q-q">${highlight(q.q, term)}</td><td class="q-a">${underline(highlight(q.a, term), q.u)}</td></tr>`;
 
 function renderQuestions(wanted) {
   const weeks = league.weeks.filter(questionsFor).reverse();

@@ -57,7 +57,10 @@
     {
      "n": 11,
      "q": "Which three teams were relegated from the Premier League at the end of the 2025-26 season?",
-     "a": "West Ham, Burnley and Wolverhampton Wanderers"
+     "a": "West Ham, Burnley and Wolverhampton Wanderers",
+     "u": [
+      "West Ham, Burnley and Wolverhampton Wanderers"
+     ]
     },
     {
      "n": 12,
@@ -168,7 +171,10 @@
     {
      "n": 32,
      "q": "What are the three Bee Gees' first names?",
-     "a": "Barry, Robin and Maurice"
+     "a": "Barry, Robin and Maurice",
+     "u": [
+      "Barry, Robin and Maurice"
+     ]
     },
     {
      "n": 33,
@@ -178,7 +184,10 @@
     {
      "n": 34,
      "q": "Which two boxers fought in 'The Rumble in the Jungle'?",
-     "a": "Muhammad Ali and George Foreman"
+     "a": "Muhammad Ali and George Foreman",
+     "u": [
+      "Muhammad Ali and George Foreman"
+     ]
     },
     {
      "n": 35,
