@@ -140,6 +140,9 @@ h3 { font: 600 1.1rem/1.3 var(--font-display); margin: 0 }
 .matches .score.vs { font-family: var(--font-body); font-weight: 400; color: var(--muted); background: none }
 .matches .won { font-weight: 700 }
 .matches .first { display: inline-block; font: 700 .68rem var(--font-body); letter-spacing: .03em; color: var(--accent); border: 1px solid currentColor; border-radius: 4px; padding: 0 3px; flex: none }
+.matches li.mine { background: var(--accent-soft); border-radius: 8px; padding-inline: 8px; margin-inline: -8px; border-top-color: transparent }
+.matches li.mine + li { border-top-color: transparent }
+.matches li.mine .hl { background: none; font-weight: 700 }
 .hl { background: var(--accent-soft); border-radius: 4px; padding-inline: 4px; margin-inline: -4px }
 
 /* League table */
@@ -270,8 +273,6 @@ footer a { color: inherit }
 
   <section class="view" id="view-fixtures" hidden>
     <div class="toolbar">
-      <label for="team-filter" class="small muted">Show</label>
-      <select id="team-filter"><option value="">All teams</option></select>
       <button class="btn ghost" id="jump-next" type="button">Jump to next week</button>
     </div>
     <div id="weeks" style="display:grid;gap:14px"></div>
@@ -391,7 +392,7 @@ footer a { color: inherit }
     <h2>Settings</h2>
     <article class="card set-card">
       <h3>Your team</h3>
-      <p class="small muted">Picks out your team on Home, in the table and in the fixtures, and shows just your team’s fixtures to start with.</p>
+      <p class="small muted">Picks out your team on Home, in the table and in the fixtures.</p>
       <select id="set-team" aria-label="Your team"><option value="">No team</option></select>
     </article>
     <article class="card set-card">
@@ -519,7 +520,7 @@ function matchRows(matches, team) {
       ? `<span class="score" aria-label="${m.homeScore} to ${m.awayScore}">${m.homeScore} – ${m.awayScore}</span>`
       : '<span class="score vs">v</span>';
     const first = side => m.first === side ? '<span class="first" title="Went first" aria-label="(went first)">1st</span>' : '';
-    return `<li><span class="home${hw ? ' won' : ''}"><span class="${mark(m.home)}">${esc(m.home)}</span>${first('home')}</span>${score}<span class="away${aw ? ' won' : ''}">${first('away')}<span class="${mark(m.away)}">${esc(m.away)}</span></span></li>`;
+    return `<li${team && (m.home === team || m.away === team) ? ' class="mine"' : ''}><span class="home${hw ? ' won' : ''}"><span class="${mark(m.home)}">${esc(m.home)}</span>${first('home')}</span>${score}<span class="away${aw ? ' won' : ''}">${first('away')}<span class="${mark(m.away)}">${esc(m.away)}</span></span></li>`;
   }).join('') + '</ul>';
 }
 
@@ -549,30 +550,22 @@ function render() {
   $('home-table').innerHTML = tableHtml(league.table, !homePrefs().full.table);
   $('full-table').innerHTML = tableHtml(league.table, false);
 
-  const filter = $('team-filter');
-  if (filter.options.length === 1) {
-    filter.insertAdjacentHTML('beforeend', league.teams.map(t => `<option>${esc(t)}</option>`).join(''));
-    filter.value = myTeam();
-  }
   renderWeeks();
   fillSendForm();
 }
 
 function renderWeeks() {
-  const team = $('team-filter').value;
+  // Every team's fixtures, with your team (from Settings) picked out.
+  const team = myTeam();
   $('weeks').innerHTML = league.weeks.map(w => {
-    const matches = team ? w.matches.filter(m => m.home === team || m.away === team) : w.matches;
-    const setting = team && w.setter === team;
-    const body = matches.length ? matchRows(matches, team) : (setting ? '' : '<p class="muted" style="margin:0">Not playing this week.</p>');
     const tag = w.week === league.nextWeek ? '<span class="pill">Next</span>' : '';
     return `<article class="card week${w.week === league.nextWeek ? ' next' : ''}" id="week-${w.week}">
       <div class="card-head"><h3>Week ${w.week} · ${day(w.date)}</h3>${tag}</div>
-      ${setting ? `<div class="setter"><span aria-hidden="true">✎</span><span><b>${esc(team)}</b> are setting the questions this week${qLink(w)}</span></div>` : (team ? '' : setterLine(w))}
-      ${body}</article>`;
+      ${setterLine(w)}
+      ${matchRows(w.matches, team)}</article>`;
   }).join('');
 }
 
-$('team-filter').addEventListener('change', renderWeeks);
 $('jump-next').addEventListener('click', () => {
   const el = $('week-' + league.nextWeek);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -726,7 +719,6 @@ function renderMyTeam() {
 }
 function setMyTeam(t) {
   store.set('svql-team', t);
-  $('team-filter').value = myTeam();
   render();
   renderSettings();
 }
