@@ -22,7 +22,10 @@
     {
      "n": 4,
      "q": "Apart from being musicians, what other accomplishment did the following have in common: John Denver, Kris Kristofferson, Gary Numan and Bruce Dickinson of Iron Maiden?",
-     "a": "They were all qualified air pilots"
+     "a": "They were all qualified air pilots",
+     "u": [
+      "air pilots"
+     ]
     },
     {
      "n": 5,
@@ -67,7 +70,10 @@
     {
      "n": 13,
      "q": "At Kadesh in 1274 BC, the world's largest land battle till then was fought between Egypt and which other kingdom?",
-     "a": "The Hittite Kingdom (the Hittites had their power base in the city of Hattusa)"
+     "a": "The Hittite Kingdom (the Hittites had their power base in the city of Hattusa)",
+     "u": [
+      "Hittite"
+     ]
     },
     {
      "n": 14,
@@ -82,7 +88,10 @@
     {
      "n": 16,
      "q": "Who composed the orchestral miniature pieces \"Chanson de Matin\" and \"Salut d'Amour\"?",
-     "a": "Edward Elgar"
+     "a": "Edward Elgar",
+     "u": [
+      "Elgar"
+     ]
     },
     {
      "n": 17,
@@ -132,7 +141,10 @@
     {
      "n": 26,
      "q": "Which fringe member of the Bloomsbury Group is currently being played by Rory Kinnear at the Theatre Royal, Haymarket in the play \"Standard of Living\"?",
-     "a": "John Maynard Keynes"
+     "a": "John Maynard Keynes",
+     "u": [
+      "Keynes"
+     ]
     },
     {
      "n": 27,
@@ -176,7 +188,10 @@
     {
      "n": 31,
      "q": "In musical terms, apart from being singers, what do Karen Carpenter, Marvin Gaye and Phil Collins share in common?",
-     "a": "They started their careers as drummers"
+     "a": "They started their careers as drummers",
+     "u": [
+      "drummers"
+     ]
     },
     {
      "n": 32,
@@ -221,7 +236,10 @@
     {
      "n": 40,
      "q": "In technical terms, what was significant about the BBC TV drama series \"Take Three Girls\" first shown in 1969?",
-     "a": "It was the first drama series shown in colour"
+     "a": "It was the first drama series shown in colour",
+     "u": [
+      "in colour"
+     ]
     },
     {
      "n": 41,
@@ -256,12 +274,18 @@
     {
      "n": 47,
      "q": "Who composed the orchestral work \"Fantasia on a Theme by Thomas Tallis\"?",
-     "a": "Ralph Vaughan Williams"
+     "a": "Ralph Vaughan Williams",
+     "u": [
+      "Vaughan Williams"
+     ]
     },
     {
      "n": 48,
      "q": "What notable monument was Gutzon Borglum chosen to design in the USA in 1927?",
-     "a": "The sculptures on Mount Rushmore"
+     "a": "The sculptures on Mount Rushmore",
+     "u": [
+      "Mount Rushmore"
+     ]
     },
     {
      "n": 49,
@@ -321,7 +345,10 @@
     {
      "n": 60,
      "q": "The \"Royal Daffodil\", in the news recently, is the name of what?",
-     "a": "The new Mersey Ferry"
+     "a": "The new Mersey Ferry",
+     "u": [
+      "Mersey Ferry"
+     ]
     }
    ],
    "spares": [
@@ -331,7 +358,10 @@
     },
     {
      "q": "Which footballer had his red card at the 2026 World Cup rescinded by Donald Trump?",
-     "a": "Folarin Balogun"
+     "a": "Folarin Balogun",
+     "u": [
+      "Balogun"
+     ]
     },
     {
      "q": "The Italian town of Pistoia is claimed to be the original location of what invention?",

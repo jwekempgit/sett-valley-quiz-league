@@ -118,6 +118,8 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
 
 main { padding-block: 20px 48px }
 section.view { display: grid; gap: 18px }
+section.view > *, .card > * { min-width: 0 }  /* let long drop-downs shrink to the screen instead of widening the page */
+.q-pick select { min-width: 0; max-width: 100% }
 h2 { font: 600 1.35rem/1.2 var(--font-display); margin: 0 }
 h3 { font: 600 1.1rem/1.3 var(--font-display); margin: 0 }
 .muted { color: var(--muted) }
@@ -218,6 +220,7 @@ form.send { display: grid; gap: 16px }
 .q-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700 }
 .q-table .q-n { width: 2.2em; color: var(--muted); font-variant-numeric: tabular-nums }
 .q-table td.q-a { font-weight: 600; width: 34% }
+.q-table td.q-a u, .card u { text-decoration-thickness: 2px; text-underline-offset: 3px }
 .q-hidden .q-a { visibility: hidden }
 @media (max-width: 600px) {
   .q-table thead { display: none }
@@ -322,7 +325,7 @@ footer a { color: inherit }
   <section class="view" id="view-questions" hidden>
     <article class="card">
       <div class="card-head"><h2>Questions</h2></div>
-      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added the day after the matches are played.</p>
+      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added the day after the matches are played. <u>Underlined</u> parts of an answer must be given in full.</p>
       <div id="q-body"></div>
     </article>
   </section>
@@ -818,7 +821,9 @@ function highlight(text, term) {
   return out + esc(text.slice(i));
 }
 const qTable = (body, extra = '') => `<table class="q-table"><thead><tr>${extra ? '<th class="q-w">Week</th>' : ''}<th class="q-n">#</th><th class="q-q">Question</th><th class="q-a">Answer</th></tr></thead><tbody>${body}</tbody></table>`;
-const qRow = (n, q, term, week = '') => `<tr>${week}<td class="q-n">${n}</td><td class="q-q">${highlight(q.q, term)}</td><td class="q-a">${highlight(q.a, term)}</td></tr>`;
+// The parts of an answer that must be given in full (underlined on the sheet), listed in the set's "u".
+const underline = (html, parts = []) => parts.reduce((h, u) => h.replace(esc(u), '<u>$&</u>'), html);
+const qRow = (n, q, term, week = '') => `<tr>${week}<td class="q-n">${n}</td><td class="q-q">${highlight(q.q, term)}</td><td class="q-a">${underline(highlight(q.a, term), q.u)}</td></tr>`;
 
 function renderQuestions(wanted) {
   const weeks = league.weeks.filter(questionsFor).reverse();
