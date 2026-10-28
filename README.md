@@ -8,7 +8,7 @@ It runs on Cloudflare Pages. The Google Sheet stays in charge: the site reads it
 
 | Path | What it is |
 |---|---|
-| `public/index.html` | The whole website. |
+| `public/index.html` | The whole website. Pages are picked from the bar at the foot of the screen (Home, Extras, Fixtures, Send, Settings); Questions, Rules, the Scoresheet download and Join are under Extras. |
 | `functions/api/league.js` | `GET /api/league`: reads the All Scores and Questions tabs and works out the table, weeks, next game and last results. |
 | `functions/api/submit.js` | `POST /api/submit`: checks a score and passes it to the Apps Script in the sheet. |
 | `lib/league.js` | How the sheet is read and the table is worked out (2 for a win, 1 for a draw; level teams split by quiz points scored, as in the sheet). |

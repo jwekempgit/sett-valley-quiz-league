@@ -7,6 +7,7 @@
 <title>Sett Valley Quiz League</title>
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script>/* Light or dark from Settings, set before the page draws so it doesn't flash. */ try { const t = localStorage.getItem('svql-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t } catch {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
@@ -44,18 +45,38 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
 [hidden] { display: none !important }
 .wrap { max-width: 920px; margin: 0 auto; padding-inline: 16px }
 header.top { background: var(--head); color: var(--head-ink); position: sticky; top: 0; z-index: 5 }
-header.top .wrap { padding-top: 14px; display: grid; gap: 8px }
-.brand { display: flex; align-items: center; gap: 12px }
+header.top .wrap { padding-block: 12px; display: grid; gap: 8px }
+.brand { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; justify-self: start }
 .brand img { height: 56px; width: auto; flex: none; display: block }
 .brand h1 { font: 800 1.6rem/1.1 var(--font-display); margin: 0; letter-spacing: .005em }
 @media (max-width: 420px) { .brand h1 { font-size: 1.3rem } .brand img { height: 48px } }
 .brand .season { font-size: .82rem; opacity: .8; letter-spacing: .06em; text-transform: uppercase }
-nav.tabs { display: flex; flex-wrap: wrap; gap: 0 2px; margin-inline: -8px }
-nav.tabs a { color: inherit; text-decoration: none; font-weight: 600; padding: 8px 10px 10px; border-bottom: 3px solid transparent; white-space: nowrap; opacity: .82 }
-@media (max-width: 560px) { nav.tabs .long { display: none } nav.tabs a { padding-inline: 8px } }
-@media (max-width: 430px) { nav.tabs .xlong { display: none } nav.tabs { gap: 0 } nav.tabs a { padding-inline: 6px; font-size: 14.5px } }
-nav.tabs a.dl svg { vertical-align: -2px }
-nav.tabs a[aria-current="page"] { opacity: 1; color: var(--brand); border-bottom-color: var(--brand) }
+/* App-style navigation, as on the New Mills darts and doms site: a rounded bar floating over the foot of the page
+   (Home, Extras, Fixtures, Send, Settings); the page scrolls on underneath it. */
+body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) }
+.app-bar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; position: fixed; z-index: 45; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); max-width: 540px; margin-inline: auto; height: 62px; padding: 5px; border-radius: 999px; background: rgba(13,37,61,.84); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); border: 1.5px solid rgba(47,255,205,.7); box-shadow: 0 8px 24px rgba(0,0,0,.3) }
+.app-bar a { color: #fff; text-decoration: none; border-radius: 999px; display: grid; justify-items: center; align-content: center; gap: 3px; font: 700 .74rem/1 var(--font-body); letter-spacing: .05em; text-transform: uppercase; min-width: 0 }
+.app-bar svg { width: 24px; height: 24px }
+.app-bar a[aria-current="page"] { background: var(--brand); color: #03211b }
+.app-bar a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px }
+@media (max-width: 440px) { .app-bar a { font-size: .64rem; letter-spacing: .02em } }
+@media (max-width: 380px) { .app-bar { left: max(6px, env(safe-area-inset-left, 0px)); right: max(6px, env(safe-area-inset-right, 0px)) } .app-bar a { font-size: .58rem; letter-spacing: 0 } .app-bar svg { width: 22px; height: 22px } }
+/* Extras: a tile for each of the other pages. */
+.xt-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px }
+@media (min-width: 760px) { .xt-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) } }
+.xt { border-radius: 16px; background: var(--head); color: #fff; text-decoration: none; padding: 18px 8px 14px; display: grid; justify-items: center; align-content: start; gap: 8px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,.18); transition: transform .12s }
+.xt:hover { transform: translateY(-2px) }
+.xt svg { width: 40px; height: 40px; color: var(--brand) }
+.xt b { font: 700 1.15rem/1.1 var(--font-display) }
+.xt small { font-size: .8rem; color: #b9cde0; line-height: 1.25 }
+@media (prefers-reduced-motion: reduce) { .xt { transition: none } }
+/* Settings */
+.set-card { max-width: 520px }
+.set-card p { margin: 0 }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; background: var(--bg); justify-self: start; flex-wrap: wrap }
+.seg button { font: 600 .95rem var(--font-body); border: 0; border-radius: 999px; padding: 7px 16px; background: none; color: var(--ink); cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink) }
+table.league tr.mine td { background: var(--accent-soft) }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
 main { padding-block: 20px 48px }
@@ -103,7 +124,7 @@ table.league td.pts { font-weight: 700; font-size: 1.05rem }
 /* Fixtures */
 .toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
 select, input[type="number"], input[type="text"] { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-height: 42px }
-.week { scroll-margin-top: 130px }
+.week { scroll-margin-top: 96px }
 .week.next { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) }
 .week.off { opacity: .9 }
 .btn { font: 700 1rem var(--font-body); border: 0; border-radius: 8px; padding: 10px 16px; min-height: 44px; cursor: pointer; background: var(--btn); color: var(--btn-ink) }
@@ -178,23 +199,13 @@ footer a { color: inherit }
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">
+    <a class="brand" href="#home" title="Home">
       <img src="/logo.png" alt="SVQL" width="46" height="56">
       <div>
         <h1>Sett Valley Quiz League</h1>
         <div class="season" id="season">Pub quiz league · Sett Valley, Derbyshire</div>
       </div>
-    </div>
-    <nav class="tabs" aria-label="Sections">
-      <a href="#home">Home</a>
-      <a href="#table">Table</a>
-      <a href="#fixtures">Fixtures<span class="long"> &amp; results</span></a>
-      <a href="#send">Send<span class="xlong"> score</span></a>
-      <a href="#questions">Questions</a>
-      <a href="#rules">Rules</a>
-      <a href="#join">Join</a>
-      <a class="dl" href="https://docs.google.com/document/d/1iHI9IsOQKIqiYA7OPIyVOxJ2kH8b3GTRL_0YjwkkPho/export?format=pdf" title="Download the scoresheet (PDF)" aria-label="Download the scoresheet (PDF)"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg> Scoresheet</a>
-    </nav>
+    </a>
   </div>
 </header>
 
@@ -328,6 +339,39 @@ footer a { color: inherit }
       </ol>
     </article>
   </section>
+  <section class="view" id="view-extras" hidden>
+    <h2>Extras</h2>
+    <div class="xt-grid">
+      <a class="xt" href="#questions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.5-2.7 4.1"/><circle cx="12" cy="17.6" r=".6" fill="currentColor"/></svg><b>Questions</b><small>Every week’s set, with answers</small></a>
+      <a class="xt" href="#rules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H19v-3"/><path d="M8 7.5h7M8 11h7"/></svg><b>Rules</b><small>How a league match works</small></a>
+      <a class="xt" href="https://docs.google.com/document/d/1iHI9IsOQKIqiYA7OPIyVOxJ2kH8b3GTRL_0YjwkkPho/export?format=pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg><b>Scoresheet</b><small>Download to print (PDF)</small></a>
+      <a class="xt" href="#join"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9.5" cy="8" r="3.8"/><path d="M2.5 20.5c.6-3.8 3.4-6 7-6s6.4 2.2 7 6"/><path d="M19 8v6M16 11h6"/></svg><b>Join</b><small>New players, teams and venues</small></a>
+    </div>
+    <p class="small muted" style="margin:0">The full league table is on <a href="#table" style="color:var(--accent);font-weight:600">its own page</a>, and on Home.</p>
+  </section>
+
+  <section class="view" id="view-settings" hidden>
+    <h2>Settings</h2>
+    <article class="card set-card">
+      <h3>Your team</h3>
+      <p class="small muted">Picks out your team on Home, in the table and in the fixtures, and shows just your team’s fixtures to start with.</p>
+      <select id="set-team" aria-label="Your team"><option value="">No team</option></select>
+    </article>
+    <article class="card set-card">
+      <h3>Light or dark</h3>
+      <p class="small muted">Auto follows your phone or computer.</p>
+      <div class="seg" role="group" aria-label="Light or dark" id="set-theme">
+        <button type="button" data-theme="auto">Auto</button><button type="button" data-theme="light">Light</button><button type="button" data-theme="dark">Dark</button>
+      </div>
+    </article>
+    <article class="card set-card">
+      <h3>Score code</h3>
+      <p class="small muted" id="set-code-note"></p>
+      <div><button class="btn ghost" type="button" id="set-code-forget">Forget the score code</button></div>
+    </article>
+    <p class="small muted" style="margin:0">Settings are saved on this phone or computer only.</p>
+  </section>
+
   <section class="view" id="view-join" hidden>
     <article class="card join">
       <h2>Join the league</h2>
@@ -374,6 +418,14 @@ footer a { color: inherit }
   </section>
 </main>
 
+<nav class="app-bar" id="app-bar" aria-label="Main">
+  <a href="#home" data-app="home"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 11.5h3V21h5.5v-6h3v6H19v-9.5h3z"/></svg>Home</a>
+  <a href="#extras" data-app="extras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Extras</a>
+  <a href="#fixtures" data-app="fixtures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="M7.5 13.5h2M11 13.5h2M14.5 13.5h2M7.5 17h2M11 17h2"/></svg>Fixtures</a>
+  <a href="#send" data-app="send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.5 10.5 13.5"/><path d="M21.5 2.5 14.5 21.5l-4-8-8-4z"/></svg>Send</a>
+  <a href="#settings" data-app="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</a>
+</nav>
+
 <footer class="wrap">
   <div class="credit"><a href="https://twist2solve.com" target="_blank" rel="noopener">built by <img src="data:image/png;base64,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" alt="" width="17" height="18"> <span>Twist2Solve</span></a></div>
 </footer>
@@ -386,6 +438,8 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, v) } catch {} },
 };
 const $ = id => document.getElementById(id);
+// Your team, from Settings: picked out on Home, in the table and in the fixtures.
+const myTeam = () => { const t = store.get('svql-team') || ''; return league && league.teams.includes(t) ? t : ''; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const dayFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
@@ -432,7 +486,7 @@ const setterLine = w => w.setter ? `<div class="setter"><span aria-hidden="true"
 
 function tableHtml(rows, compact) {
   const head = `<tr><th>#</th><th class="team">Team</th><th>P</th><th class="${compact ? 'wide' : ''}">W</th><th class="${compact ? 'wide' : ''}">D</th><th class="${compact ? 'wide' : ''}">L</th><th>For</th><th class="wide">Ag</th>${compact ? '' : '<th class="wide">Form</th>'}<th>Pts</th></tr>`;
-  const body = rows.map(r => `<tr><td>${r.pos}</td><td class="team">${esc(r.team)}</td><td>${r.played}</td><td class="${compact ? 'wide' : ''}">${r.won}</td><td class="${compact ? 'wide' : ''}">${r.drawn}</td><td class="${compact ? 'wide' : ''}">${r.lost}</td><td>${r.for}</td><td class="wide">${r.against}</td>${compact ? '' : `<td class="wide"><span class="form">${r.form.map(f => `<span class="${f}" title="${{ W: 'Won', D: 'Drew', L: 'Lost' }[f]}">${f}</span>`).join('')}</span></td>`}<td class="pts">${r.points}</td></tr>`).join('');
+  const body = rows.map(r => `<tr${r.team === myTeam() ? ' class="mine"' : ''}><td>${r.pos}</td><td class="team">${esc(r.team)}</td><td>${r.played}</td><td class="${compact ? 'wide' : ''}">${r.won}</td><td class="${compact ? 'wide' : ''}">${r.drawn}</td><td class="${compact ? 'wide' : ''}">${r.lost}</td><td>${r.for}</td><td class="wide">${r.against}</td>${compact ? '' : `<td class="wide"><span class="form">${r.form.map(f => `<span class="${f}" title="${{ W: 'Won', D: 'Drew', L: 'Lost' }[f]}">${f}</span>`).join('')}</span></td>`}<td class="pts">${r.points}</td></tr>`).join('');
   return `<table class="league"><thead>${head}</thead><tbody>${body}</tbody></table>`;
 }
 
@@ -441,17 +495,20 @@ function render() {
   const next = weekOf(league.nextWeek), last = weekOf(league.lastWeek);
 
   $('next-card').innerHTML = next
-    ? `<div class="card-head"><div><span class="pill">${next.date === todayIso() ? 'Tonight' : 'Next game'}</span><h2>Week ${next.week} · ${longDay(next.date)}</h2></div></div>${setterLine(next)}${matchRows(next.matches)}`
+    ? `<div class="card-head"><div><span class="pill">${next.date === todayIso() ? 'Tonight' : 'Next game'}</span><h2>Week ${next.week} · ${longDay(next.date)}</h2></div></div>${setterLine(next)}${matchRows(next.matches, myTeam())}`
     : '<span class="pill">Next game</span><h2>That’s the season done</h2><p class="muted" style="margin:0">No more league fixtures this season.</p>';
   $('last-card').innerHTML = last
-    ? `<div class="card-head"><div><span class="pill">Last results</span><h2>Week ${last.week} · ${longDay(last.date)}</h2></div></div>${setterLine(last)}${matchRows(last.matches)}`
+    ? `<div class="card-head"><div><span class="pill">Last results</span><h2>Week ${last.week} · ${longDay(last.date)}</h2></div></div>${setterLine(last)}${matchRows(last.matches, myTeam())}`
     : '<span class="pill">Last results</span><h2>No results yet</h2><p class="muted" style="margin:0">Results appear here once the first scores are in.</p>';
 
   $('home-table').innerHTML = tableHtml(league.table, true);
   $('full-table').innerHTML = tableHtml(league.table, false);
 
   const filter = $('team-filter');
-  if (filter.options.length === 1) filter.insertAdjacentHTML('beforeend', league.teams.map(t => `<option>${esc(t)}</option>`).join(''));
+  if (filter.options.length === 1) {
+    filter.insertAdjacentHTML('beforeend', league.teams.map(t => `<option>${esc(t)}</option>`).join(''));
+    filter.value = myTeam();
+  }
   renderWeeks();
   fillSendForm();
 }
@@ -556,7 +613,37 @@ $('send-form').addEventListener('submit', async e => {
   }
 });
 
-/* Tabs */
+/* Settings */
+function renderSettings() {
+  const sel = $('set-team');
+  if (league && sel.options.length === 1) sel.insertAdjacentHTML('beforeend', league.teams.map(t => `<option>${esc(t)}</option>`).join(''));
+  sel.disabled = !league;
+  sel.value = myTeam();
+  const theme = store.get('svql-theme') || 'auto';
+  $('set-theme').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.theme === theme)));
+  const code = store.get('svql-code');
+  $('set-code-note').textContent = code ? 'This phone or computer remembers the league’s score code for sending scores.' : 'No score code is saved here. It’s remembered once a score has been sent.';
+  $('set-code-forget').hidden = !code;
+}
+$('set-team').addEventListener('change', e => {
+  store.set('svql-team', e.target.value);
+  $('team-filter').value = myTeam();
+  render();
+});
+$('set-theme').addEventListener('click', e => {
+  const b = e.target.closest('[data-theme]'); if (!b) return;
+  const t = b.dataset.theme;
+  if (t === 'auto') { try { localStorage.removeItem('svql-theme') } catch {} delete document.documentElement.dataset.theme; }
+  else { store.set('svql-theme', t); document.documentElement.dataset.theme = t; }
+  renderSettings();
+});
+$('set-code-forget').addEventListener('click', () => {
+  try { localStorage.removeItem('svql-code') } catch {}
+  $('code').value = '';
+  renderSettings();
+});
+
+/* Pages */
 const questionCache = {};
 const loadSet = async w => questionCache[w.date] ||= await fetch(questionsFor(w)).then(r => r.ok ? r.json() : null).catch(() => null)
   .then(set => set || (delete questionCache[w.date], null));
@@ -627,13 +714,17 @@ async function showSearch(weeks) {
 
 function route() {
   const [name, arg] = (location.hash || '#home').slice(1).split('/');
-  const view = ['home', 'table', 'fixtures', 'send', 'questions', 'rules', 'join'].includes(name) ? name : 'home';
+  const view = ['home', 'table', 'fixtures', 'send', 'questions', 'rules', 'join', 'extras', 'settings'].includes(name) ? name : 'home';
   if (view === 'questions' && league) renderQuestions(Number(arg));
-  // The Rules and Join pages are plain text, so they show even if the league sheet hasn't loaded.
-  const plain = view === 'join' || view === 'rules';
+  if (view === 'settings') renderSettings();
+  // These pages don't need the league sheet, so they show even if it hasn't loaded.
+  const plain = ['join', 'rules', 'extras', 'settings'].includes(view);
+  if (view !== route.view) { route.view = view; scrollTo(0, 0); }
   document.querySelectorAll('section.view').forEach(s => { s.hidden = s.id !== 'view-' + view || (!league && !plain); });
   if (plain) $('status').hidden = true; else if (!league) $('status').hidden = false;
-  document.querySelectorAll('nav.tabs a').forEach(a => { if (a.getAttribute('href') === '#' + view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  // Questions, Rules and Join live under Extras; the full table is reached from Home.
+  const tab = { table: 'home', questions: 'extras', rules: 'extras', join: 'extras' }[view] || view;
+  document.querySelectorAll('#app-bar a').forEach(a => { if (a.dataset.app === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   if (view === 'fixtures' && league && !route.scrolled) {
     route.scrolled = true;
     requestAnimationFrame(() => { const el = $('week-' + league.nextWeek); if (el) el.scrollIntoView({ block: 'start' }); });
