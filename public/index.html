@@ -79,6 +79,23 @@ body { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) }
 .seg button { font: 600 .95rem var(--font-body); border: 0; border-radius: 999px; padding: 7px 16px; background: none; color: var(--ink); cursor: pointer }
 .seg button[aria-pressed="true"] { background: var(--btn); color: var(--btn-ink) }
 table.league tr.mine td { background: var(--accent-soft) }
+/* Home: your team, and its fixtures */
+.my-team { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; background: var(--head); color: var(--head-ink); border-radius: 12px; padding: 10px 16px }
+.my-team b { color: var(--brand); font: 700 1.1rem var(--font-display) }
+.my-team a { color: inherit; margin-left: auto; font-size: .9rem; font-weight: 600 }
+.pick-team { display: grid; gap: 10px }
+.pick-team p { margin: 0 }
+.myfx { list-style: none; margin: 0; padding: 0; display: grid }
+.myfx li { display: grid; grid-template-columns: 6.2em 1fr auto; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line) }
+.myfx li:first-child { border-top: 0 }
+.myfx .d { color: var(--muted); font-size: .9rem; white-space: nowrap }
+.myfx .ha { display: inline-block; width: 1.6em; font: 700 .72rem var(--font-body); color: var(--accent) }
+.myfx .opp { font-weight: 600 }
+.myfx .set { color: var(--muted); font-style: italic }
+.myfx .res { display: flex; align-items: center; gap: 6px; font: 600 1rem var(--font-display); font-variant-numeric: tabular-nums; white-space: nowrap }
+.myfx .res i { font: 700 .7rem/18px var(--font-body); font-style: normal; width: 18px; text-align: center; border-radius: 4px; color: #fff }
+.myfx .res i.W { background: var(--win) } .myfx .res i.D { background: #8a8f8b } .myfx .res i.L { background: var(--loss) }
+.myfx li.next { background: var(--accent-soft); border-radius: 8px; padding-inline: 8px; margin-inline: -8px; border-top-color: transparent }
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
 main { padding-block: 20px 48px }
@@ -215,6 +232,8 @@ footer a { color: inherit }
   <div id="status" class="notice" role="status">Loading the league…</div>
 
   <section class="view" id="view-home" hidden>
+    <div id="my-team"></div>
+    <article class="card" id="my-fx" hidden></article>
     <div class="grid2">
       <article class="card" id="next-card"></article>
       <article class="card" id="last-card"></article>
@@ -503,6 +522,7 @@ function render() {
     ? `<div class="card-head"><div><span class="pill">Last results</span><h2>Week ${last.week} · ${longDay(last.date)}</h2></div></div>${setterLine(last)}${matchRows(last.matches, myTeam())}`
     : '<span class="pill">Last results</span><h2>No results yet</h2><p class="muted" style="margin:0">Results appear here once the first scores are in.</p>';
 
+  renderMyTeam();
   $('home-table').innerHTML = tableHtml(league.table, true);
   $('full-table').innerHTML = tableHtml(league.table, false);
 
@@ -615,6 +635,49 @@ $('send-form').addEventListener('submit', async e => {
   }
 });
 
+/* Home: pick your team, then see its fixtures */
+let myFxOpen = false;
+function renderMyTeam() {
+  const team = myTeam();
+  $('my-team').innerHTML = team
+    ? `<div class="my-team"><span>My Team: <b>${esc(team)}</b></span><a href="#settings">Change</a></div>`
+    : `<article class="card pick-team"><h2>Choose your team</h2><p class="muted small">See your team’s fixtures here and pick it out in the results and the table. Saved on this phone or computer only.</p>
+        <select id="pick-team" aria-label="Your team"><option value="">Choose a team…</option>${league.teams.map(t => `<option>${esc(t)}</option>`).join('')}</select></article>`;
+  if (!team) $('pick-team').addEventListener('change', e => setMyTeam(e.target.value));
+  const fx = $('my-fx');
+  fx.hidden = !team;
+  if (!team) return;
+  const today = todayIso();
+  // One line per week the team plays or sets the questions.
+  const rows = league.weeks.map(w => {
+    const m = w.matches.find(x => x.home === team || x.away === team);
+    return m || w.setter === team ? { w, m } : null;
+  }).filter(Boolean);
+  const upcoming = rows.filter(r => league.nextWeek ? r.w.week >= league.nextWeek : r.w.date >= today);
+  const shown = myFxOpen ? rows : upcoming.slice(0, 3);
+  const line = ({ w, m }) => {
+    const d = `<span class="d">${day(w.date)}</span>`;
+    if (!m) return `<li>${d}<span class="set">Setting the questions</span><span></span></li>`;
+    const home = m.home === team, opp = home ? m.away : m.home;
+    let res = '<span class="res muted" style="font:inherit">v</span>';
+    if (m.played) {
+      const us = home ? m.homeScore : m.awayScore, them = home ? m.awayScore : m.homeScore;
+      const r = us > them ? 'W' : us < them ? 'L' : 'D';
+      res = `<span class="res">${us}–${them}<i class="${r}" aria-label="${{ W: 'won', D: 'drew', L: 'lost' }[r]}">${r}</i></span>`;
+    }
+    return `<li${w.week === league.nextWeek ? ' class="next"' : ''}>${d}<span><span class="ha" title="${home ? 'Home' : 'Away'}">${home ? 'H' : 'A'}</span><span class="opp">${esc(opp)}</span></span>${res}</li>`;
+  };
+  fx.innerHTML = `<div class="card-head"><h2>My fixtures</h2><span class="small muted">${myFxOpen ? 'Whole season' : 'Next few'}</span></div>
+    ${shown.length ? `<ul class="myfx">${shown.map(line).join('')}</ul>` : '<p class="muted" style="margin:0">No more fixtures this season.</p>'}
+    <div><button class="btn ghost" type="button" id="my-fx-more">${myFxOpen ? 'Show fewer' : 'Show all fixtures'}</button></div>`;
+  $('my-fx-more').addEventListener('click', () => { myFxOpen = !myFxOpen; renderMyTeam(); });
+}
+function setMyTeam(t) {
+  store.set('svql-team', t);
+  $('team-filter').value = myTeam();
+  render();
+}
+
 /* Settings */
 function renderSettings() {
   const sel = $('set-team');
@@ -627,11 +690,7 @@ function renderSettings() {
   $('set-code-note').textContent = code ? 'This phone or computer remembers the league’s score code for sending scores.' : 'No score code is saved here. It’s remembered once a score has been sent.';
   $('set-code-forget').hidden = !code;
 }
-$('set-team').addEventListener('change', e => {
-  store.set('svql-team', e.target.value);
-  $('team-filter').value = myTeam();
-  render();
-});
+$('set-team').addEventListener('change', e => setMyTeam(e.target.value));
 $('set-theme').addEventListener('click', e => {
   const b = e.target.closest('[data-theme]'); if (!b) return;
   const t = b.dataset.theme;
