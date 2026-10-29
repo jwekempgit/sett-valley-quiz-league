@@ -158,9 +158,61 @@
      "n": 24,
      "q": "Lucas Digne played for Paris St. Germain from 2013 to 2016, returning to PSG in 2026. Name any of the 3 teams he joined in between, apart from Roma, where he was on loan.",
      "a": "Barcelona, Everton, Aston Villa"
+    },
+    {
+     "n": 25,
+     "q": "Which American state has the most lakes?",
+     "a": "Alaska (estimated at over three million – Wisconsin has 15,000)"
+    },
+    {
+     "n": 26,
+     "q": "The vacuum flask, also known by the brand name Thermos, is sometimes still called by the name of its inventor: what was his name?",
+     "a": "Sir James Dewar",
+     "u": [
+      "Dewar"
+     ]
+    },
+    {
+     "n": 27,
+     "q": "What is the nationality of the winner of the 2026 Tour de France?",
+     "a": "Slovenian"
+    },
+    {
+     "n": 28,
+     "q": "The Spanish knight Rodrigo Diaz de Vivar, the renowned military commander of the armies of Castile, is better known by which title?",
+     "a": "El Cid",
+     "u": [
+      "El Cid"
+     ]
+    },
+    {
+     "n": 29,
+     "q": "In which month do Canadians celebrate Thanksgiving?",
+     "a": "Second Monday in October",
+     "u": [
+      "October"
+     ]
+    },
+    {
+     "n": 30,
+     "q": "Singer Terence Edward Parsons was at his height in the 1960s with film themes such as \"On Days Like These\" for The Italian Job. How was he better known?",
+     "a": "Matt Monro (1930 – 1985)"
     }
    ],
-   "spares": []
+   "spares": [
+    {
+     "q": "What food is celebrated with an annual festival on the Isle of Wight?",
+     "a": "Garlic"
+    },
+    {
+     "q": "What was Dorothy L Sayers's middle name?",
+     "a": "Leigh"
+    },
+    {
+     "q": "In which Berlin prison was the Nazi politician Rudolph Hess the sole prisoner from 1966 until his death in 1987?",
+     "a": "Spandau"
+    }
+   ]
   },
   {
    "title": "Second half",
@@ -379,21 +431,21 @@
      ]
     }
    ],
-   "spares": []
+   "spares": [
+    {
+     "q": "Which two UK cities have the same name?",
+     "a": "Bangor (County Down and Gwynnedd)"
+    },
+    {
+     "q": "What did the S stand for in L. S. Lowry's name?",
+     "a": "Stephen"
+    },
+    {
+     "q": "German August Horch left his car company in 1909 after a row over costs, and started a new firm. Horch [the ch is like Scots loch] means 'listen!' or 'hark!' in English. He couldn't call his new company Horch, so he translated his surname into Latin. Namely?",
+     "a": "Audi"
+    }
+   ]
   }
  ],
- "spares": [
-  {
-   "q": "Which two UK cities have the same name?",
-   "a": "Bangor (County Down and Gwynnedd)"
-  },
-  {
-   "q": "What did the S stand for in L. S. Lowry's name?",
-   "a": "Stephen"
-  },
-  {
-   "q": "German August Horch left his car company in 1909 after a row over costs, and started a new firm. Horch [the ch is like Scots loch] means 'listen!' or 'hark!' in English. He couldn't call his new company Horch, so he translated his surname into Latin. Namely?",
-   "a": "Audi"
-  }
- ]
+ "spares": []
 }
