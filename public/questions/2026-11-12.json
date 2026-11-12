@@ -1,0 +1,335 @@
+{
+ "date": "2026-11-12",
+ "halves": [
+  {
+   "title": "First half",
+   "questions": [
+    {
+     "n": 1,
+     "q": "France, Spain and Morocco are unique in that they share coastlines with which two bodies of water?",
+     "a": "Mediterranean Sea & Atlantic Ocean"
+    },
+    {
+     "n": 2,
+     "q": "What was the name of the group fronted by Gloria Estefan?",
+     "a": "Miami Sound Machine"
+    },
+    {
+     "n": 3,
+     "q": "Ciabatta bread originates in which country?",
+     "a": "Italy"
+    },
+    {
+     "n": 4,
+     "q": "Who was England manager before Fabio Capello?",
+     "a": "Steve McClaren"
+    },
+    {
+     "n": 5,
+     "q": "Which country shares borders with Afghanistan, China, India and Iran?",
+     "a": "Pakistan"
+    },
+    {
+     "n": 6,
+     "q": "Which long-running sitcom, which launched in 1988, had characters including Cat and Holly?",
+     "a": "Red Dwarf"
+    },
+    {
+     "n": 7,
+     "q": "A fictional US newspaper has an editor called Perry White and a photographer called Jimmy Olsen. What is the chief reporter called?",
+     "a": "Clark Kent"
+    },
+    {
+     "n": 8,
+     "q": "Who was the first American in space?",
+     "a": "Alan Shepard"
+    },
+    {
+     "n": 9,
+     "q": "Which two kingdoms fought in the Battle of Stamford Bridge?",
+     "a": "England and Norway"
+    },
+    {
+     "n": 10,
+     "q": "When was the Peak Forest Canal opened?",
+     "a": "1796 (accept 1791 to 1801)"
+    },
+    {
+     "n": 11,
+     "q": "Name the prison where Jeffrey Epstein died.",
+     "a": "Metropolitan Correction Centre, Manhattan, New York",
+     "u": [
+      "Metropolitan Correction Centre"
+     ]
+    },
+    {
+     "n": 12,
+     "q": "What is Prince Harry's first Christian name?",
+     "a": "Henry"
+    },
+    {
+     "n": 13,
+     "q": "The Einstein-Rosen bridge, well known in physics around time travel, is known by what nickname?",
+     "a": "Wormhole"
+    },
+    {
+     "n": 14,
+     "q": "How many hurdles are jumped in the 110-metre race?",
+     "a": "10"
+    },
+    {
+     "n": 15,
+     "q": "Who was known as the Angel of Death during World War Two?",
+     "a": "Josef Mengele"
+    },
+    {
+     "n": 16,
+     "q": "How is Stefani Joanne Angelina Germanotta better known?",
+     "a": "Lady Gaga"
+    },
+    {
+     "n": 17,
+     "q": "Annie Lennox and Dave Stewart were known by which name?",
+     "a": "Eurythmics"
+    },
+    {
+     "n": 18,
+     "q": "Where on the body would you find the philtrum?",
+     "a": "Face – between nose and upper lip"
+    },
+    {
+     "n": 19,
+     "q": "A Margarita has which main alcoholic component?",
+     "a": "Tequila"
+    },
+    {
+     "n": 20,
+     "q": "How many US states begin with the letter A?",
+     "a": "4: Alaska, Alabama, Arizona, Arkansas"
+    },
+    {
+     "n": 21,
+     "q": "What does the G stand for in 3G, 4G and 5G in terms of mobile phone communications?",
+     "a": "Generation"
+    },
+    {
+     "n": 22,
+     "q": "The artificial lake Gatun feeds water to where?",
+     "a": "The locks on the Panama Canal"
+    },
+    {
+     "n": 23,
+     "q": "In which city would you find Lansdowne Road Stadium?",
+     "a": "Dublin"
+    },
+    {
+     "n": 24,
+     "q": "Which American president shouted, “Tear down this wall!” in 1987?",
+     "a": "Ronald Reagan"
+    },
+    {
+     "n": 25,
+     "q": "The Big Dipper is made up of how many stars?",
+     "a": "Seven"
+    },
+    {
+     "n": 26,
+     "q": "Who makes the Veyron car?",
+     "a": "Bugatti"
+    },
+    {
+     "n": 27,
+     "q": "Which is the largest country contained wholly inside Europe?",
+     "a": "Ukraine"
+    },
+    {
+     "n": 28,
+     "q": "What is the more common name for the festival known as Fat Tuesday?",
+     "a": "Mardi Gras"
+    },
+    {
+     "n": 29,
+     "q": "The Taj Mahal was built in which century?",
+     "a": "17th"
+    },
+    {
+     "n": 30,
+     "q": "Who played the Green Fairy in Moulin Rouge?",
+     "a": "Kylie Minogue"
+    }
+   ],
+   "spares": [
+    {
+     "q": "Where was the movie The Full Monty set?",
+     "a": "Sheffield"
+    }
+   ]
+  },
+  {
+   "title": "Second half",
+   "questions": [
+    {
+     "n": 31,
+     "q": "Mycology is the study of what?",
+     "a": "Mushrooms"
+    },
+    {
+     "n": 32,
+     "q": "Who wrote The Silence Of The Lambs?",
+     "a": "Thomas Harris"
+    },
+    {
+     "n": 33,
+     "q": "Which actor was born Archibald Leach in 1904?",
+     "a": "Cary Grant"
+    },
+    {
+     "n": 34,
+     "q": "In which country would you find Mount Elbrus?",
+     "a": "Russia"
+    },
+    {
+     "n": 35,
+     "q": "What is the main ingredient in guacamole?",
+     "a": "Avocado"
+    },
+    {
+     "n": 36,
+     "q": "What was the name of the Dodge Charger in The Dukes Of Hazzard?",
+     "a": "General Lee"
+    },
+    {
+     "n": 37,
+     "q": "On the London Tube network, which is the only station to begin with the letter I?",
+     "a": "Ickenham"
+    },
+    {
+     "n": 38,
+     "q": "Alaska is the largest state in America, but what is the second largest?",
+     "a": "Texas"
+    },
+    {
+     "n": 39,
+     "q": "Which continent is home to the Pensacola Mountains?",
+     "a": "Antarctica"
+    },
+    {
+     "n": 40,
+     "q": "Which country’s flag has a yellow cross on a black and green background?",
+     "a": "Jamaica"
+    },
+    {
+     "n": 41,
+     "q": "What was the capital of Jamaica from 1534 to 1872?",
+     "a": "Spanish Town"
+    },
+    {
+     "n": 42,
+     "q": "Which sign & symbol language is used in Early Years settings to help young children develop communication skills?",
+     "a": "Makaton"
+    },
+    {
+     "n": 43,
+     "q": "Which US Secretary of State claimed “There cannot be a crisis next week. My schedule is already full”?",
+     "a": "Henry Kissinger"
+    },
+    {
+     "n": 44,
+     "q": "Which zodiac sign is symbolised by the mythical sea goat?",
+     "a": "Capricorn"
+    },
+    {
+     "n": 45,
+     "q": "Which is the only animal named in the title of a Shakespeare play?",
+     "a": "Shrew"
+    },
+    {
+     "n": 46,
+     "q": "In the musical Grease, what is the name of the car that is automatic, systematic and hydromatic?",
+     "a": "Greased Lightnin’"
+    },
+    {
+     "n": 47,
+     "q": "Who is the Roman goddess of intelligence, philosophy, craftsmanship, art and inspiration?",
+     "a": "Minerva"
+    },
+    {
+     "n": 48,
+     "q": "Where in the UK will you find Smoo Cave?",
+     "a": "Sutherland, Scotland"
+    },
+    {
+     "n": 49,
+     "q": "The annual presentation of debutantes at Buckingham Palace ended in which year?",
+     "a": "1958 (give or take 3 years: accept 1955 to 1961)"
+    },
+    {
+     "n": 50,
+     "q": "In religion, what is glossolalia?",
+     "a": "Speaking in tongues"
+    },
+    {
+     "n": 51,
+     "q": "Which British handbag brand is renowned for its Scottie dog-stamped leather goods?",
+     "a": "Radley"
+    },
+    {
+     "n": 52,
+     "q": "Which Hindu religious movement was supported by George Harrison?",
+     "a": "Hare Krishna"
+    },
+    {
+     "n": 53,
+     "q": "Which Grammy-winning UK singer was the first female solo artist to simultaneously have four singles in the top 10?",
+     "a": "Olivia Dean"
+    },
+    {
+     "n": 54,
+     "q": "What is the address of the White House?",
+     "a": "1600 Pennsylvania Avenue, Washington DC"
+    },
+    {
+     "n": 55,
+     "q": "In religion, what is Pentecost?",
+     "a": "The coming of the Holy Spirit"
+    },
+    {
+     "n": 56,
+     "q": "What is Miss Piggy’s surname in The Muppet Show?",
+     "a": "Lee"
+    },
+    {
+     "n": 57,
+     "q": "What does Donald Trump call his stream-of-consciousness speaking style?",
+     "a": "The weave"
+    },
+    {
+     "n": 58,
+     "q": "What is the name of the hook or tail attached to the letter C to show that it is pronounced like an ‘s’ rather than a ‘k’?",
+     "a": "Cedilla"
+    },
+    {
+     "n": 59,
+     "q": "What colour is Mr Tickle in the book by Roger Hargreaves?",
+     "a": "Orange"
+    },
+    {
+     "n": 60,
+     "q": "Which Northern Irish writer won the Man Booker Prize in 2018 with her novel Milkman?",
+     "a": "Anna Burns"
+    }
+   ],
+   "spares": [
+    {
+     "q": "Ermine Street ran from London to which city?",
+     "a": "York"
+    },
+    {
+     "q": "The sword of Saint Catherine of Fierbois is associated with which historical figure?",
+     "a": "Joan of Arc"
+    }
+   ]
+  }
+ ],
+ "spares": []
+}
