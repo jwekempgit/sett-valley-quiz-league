@@ -325,7 +325,7 @@ footer a { color: inherit }
   <section class="view" id="view-questions" hidden>
     <article class="card">
       <div class="card-head"><h2>Questions</h2></div>
-      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added the day after the matches are played. <u>Underlined</u> parts of an answer must be given in full.</p>
+      <p class="muted" style="margin:0">Each week’s 60 questions and spares, with answers, added once all that week’s scores are in. <u>Underlined</u> parts of an answer must be given in full.</p>
       <div id="q-body"></div>
     </article>
   </section>
@@ -516,8 +516,9 @@ async function load(fresh) {
 }
 
 const weekOf = n => league.weeks.find(w => w.week === n);
-// A week's questions only show from the day after its matches, so nobody sees them early.
-const questionsFor = w => questionSets[w.date] && w.date < todayIso() ? '/questions/' + encodeURIComponent(questionSets[w.date]) : null;
+// A week's questions show once all its scores are in (or from the day after its matches), so nobody sees them early.
+const weekDone = w => w.date < todayIso() || (w.date === todayIso() && w.matches.length > 0 && w.matches.every(m => m.played));
+const questionsFor = w => questionSets[w.date] && weekDone(w) ? '/questions/' + encodeURIComponent(questionSets[w.date]) : null;
 
 function matchRows(matches, team) {
   return '<ul class="matches">' + matches.map(m => {
