@@ -1,0 +1,553 @@
+{
+ "date": "2026-11-26",
+ "halves": [
+  {
+   "title": "First half",
+   "questions": [
+    {
+     "n": 1,
+     "q": "Who wrote a posthumous memoir whose title in English is The Motorcycle Diaries?",
+     "a": "Che Guevara",
+     "u": [
+      "Che Guevara"
+     ]
+    },
+    {
+     "n": 2,
+     "q": "What London street and Monopoly property is named after a street game?",
+     "a": "Pall Mall",
+     "u": [
+      "Pall Mall"
+     ]
+    },
+    {
+     "n": 3,
+     "q": "The character of Zazu in The Lion King, voiced by Rowan Atkinson, was what type of bird?",
+     "a": "Hornbill",
+     "u": [
+      "Hornbill"
+     ]
+    },
+    {
+     "n": 4,
+     "q": "Name any member of the group of 19th-century composers known as the ‘Mighty Five’ or the ‘Mighty Handful’.",
+     "a": "Mily Balakirev, César Cui, Modest Mussorgsky, Nikolai Rimsky-Korsakov, Alexander Borodin",
+     "u": [
+      "Balakirev",
+      "Cui",
+      "Mussorgsky",
+      "Rimsky-Korsakov",
+      "Borodin"
+     ]
+    },
+    {
+     "n": 5,
+     "q": "To the nearest half-hour, what is the record shortest time for the Yorkshire Three Peaks challenge route?",
+     "a": "2½ hours (2:29:53, set in 1974)",
+     "u": [
+      "2½ hours"
+     ]
+    },
+    {
+     "n": 6,
+     "q": "What is the name of Gwyneth Paltrow's wellness brand?",
+     "a": "Goop",
+     "u": [
+      "Goop"
+     ]
+    },
+    {
+     "n": 7,
+     "q": "The islands of Hirta, Dùn, Soay and Boreray make up which Scottish archipelago?",
+     "a": "St Kilda",
+     "u": [
+      "St Kilda"
+     ]
+    },
+    {
+     "n": 8,
+     "q": "What was the year of the Battle of the Boyne (5 years’ leeway)?",
+     "a": "1685–1695 [1690]",
+     "u": [
+      "1685–1695"
+     ]
+    },
+    {
+     "n": 9,
+     "q": "Nicknamed “a spark plug with a roof”, what was the best-selling car brand in the former East Germany?",
+     "a": "Trabant",
+     "u": [
+      "Trabant"
+     ]
+    },
+    {
+     "n": 10,
+     "q": "Which two actors played the titular Nuns on the Run?",
+     "a": "Eric Idle and Robbie Coltrane",
+     "u": [
+      "Idle",
+      "Coltrane"
+     ]
+    },
+    {
+     "n": 11,
+     "q": "What is the two-word English name of Heracleum mantegazzianum, introduced to the UK as an ornamental plant, which has toxic sap that causes human skin to become sensitive to sunlight?",
+     "a": "Giant Hogweed [accept Cartwheel Flower, Wild Parsnip or Wild Rhubarb]",
+     "u": [
+      "Giant Hogweed",
+      "Cartwheel Flower",
+      "Wild Parsnip",
+      "Wild Rhubarb"
+     ]
+    },
+    {
+     "n": 12,
+     "q": "The Bilderberg Group is a forum for politicians and captains of industry, and the subject of various conspiracy theories. It gets its name from the Bilderberg Hotel, where its first conference was held in 1954. In which country is Bilderberg?",
+     "a": "The Netherlands [accept Holland]",
+     "u": [
+      "Netherlands",
+      "Holland"
+     ]
+    },
+    {
+     "n": 13,
+     "q": "The Old Thirteenth Cheshire Astley Volunteer Rifleman Corps Inn is the longest pub name in Britain. In which town in Greater Manchester is it?",
+     "a": "Stalybridge",
+     "u": [
+      "Stalybridge"
+     ]
+    },
+    {
+     "n": 14,
+     "q": "The UNESCO World Heritage Site of Lascaux [pronounced ‘Lasko’], a network of caves famous for their prehistoric paintings, is in which French département?",
+     "a": "Dordogne",
+     "u": [
+      "Dordogne"
+     ]
+    },
+    {
+     "n": 15,
+     "q": "Give a year in the original run of the BBC TV series Blake’s 7.",
+     "a": "1978–1981",
+     "u": [
+      "1978–1981"
+     ]
+    },
+    {
+     "n": 16,
+     "q": "Who is the current Secretary of State for Digital, Culture, Media and Sport?",
+     "a": "Lisa Nandy",
+     "u": [
+      "Nandy"
+     ]
+    },
+    {
+     "n": 17,
+     "q": "What is the first name of Jair Bolsonaro's son, who recently lost the Brazilian election and fled to the US?",
+     "a": "Flávio",
+     "u": [
+      "Flávio"
+     ]
+    },
+    {
+     "n": 18,
+     "q": "For which national team was Antonin Panenka playing when he won the European Championship with the penalty in the style that now bears his name?",
+     "a": "Czechoslovakia [accept Czech Republic or Czechia]",
+     "u": [
+      "Czechoslovakia",
+      "Czech Republic",
+      "Czechia"
+     ]
+    },
+    {
+     "n": 19,
+     "q": "Which building was designed and built by Captain Francis Fowke and Major-General Henry Young Darracott Scott, and opened by Queen Victoria in 1871?",
+     "a": "The Royal Albert Hall",
+     "u": [
+      "Albert Hall"
+     ]
+    },
+    {
+     "n": 20,
+     "q": "What capital Greek letter is identical to the Roman letter X?",
+     "a": "Chi",
+     "u": [
+      "Chi"
+     ]
+    },
+    {
+     "n": 21,
+     "q": "What animal was Hathi in The Jungle Book?",
+     "a": "Elephant",
+     "u": [
+      "Elephant"
+     ]
+    },
+    {
+     "n": 22,
+     "q": "Southend was granted city status as a tribute to which MP, murdered in October 2021?",
+     "a": "Sir David Amess",
+     "u": [
+      "Amess"
+     ]
+    },
+    {
+     "n": 23,
+     "q": "What capital city is nicknamed the Big Durian?",
+     "a": "Jakarta",
+     "u": [
+      "Jakarta"
+     ]
+    },
+    {
+     "n": 24,
+     "q": "What number appears prominently on the label of a standard bottle of Jack Daniels Tennessee Sour Mash Whisky?",
+     "a": "Seven (‘Old No. 7 brand’)",
+     "u": [
+      "Seven"
+     ]
+    },
+    {
+     "n": 25,
+     "q": "Which TV history series ran on Granada TV between 1960 and 1989? Its presenters were, consecutively, James Cameron, Brian Inglis and Bernard Braden.",
+     "a": "All Our Yesterdays",
+     "u": [
+      "All Our Yesterdays"
+     ]
+    },
+    {
+     "n": 26,
+     "q": "Which author won the 2026 Man Booker Prize for The End of Everything?",
+     "a": "Michael John Harrison",
+     "u": [
+      "Harrison"
+     ]
+    },
+    {
+     "n": 27,
+     "q": "What is the name of the schooner captained by Alexander Smollett in Treasure Island?",
+     "a": "The Hispaniola",
+     "u": [
+      "Hispaniola"
+     ]
+    },
+    {
+     "n": 28,
+     "q": "Which member of the Pre-Raphaelite Brotherhood painted Beata Beatrix and The Blessed Damozel?",
+     "a": "Dante Gabriel Rossetti",
+     "u": [
+      "Rossetti"
+     ]
+    },
+    {
+     "n": 29,
+     "q": "Which bestselling writer of serious history was also Editor of the Evening Standard and the Daily Telegraph?",
+     "a": "Max Hastings",
+     "u": [
+      "Hastings"
+     ]
+    },
+    {
+     "n": 30,
+     "q": "On which Scottish island do scheduled Loganair flights land on the beach?",
+     "a": "Barra",
+     "u": [
+      "Barra"
+     ]
+    }
+   ],
+   "spares": [
+    {
+     "q": "Which West Midlands town was granted city status in 2000?",
+     "a": "Wolverhampton",
+     "u": [
+      "Wolverhampton"
+     ]
+    },
+    {
+     "q": "What year is expressed if you write every letter used in the Roman numeral system from M down to I once, in descending order of value?",
+     "a": "1666 (MDCLXVI)",
+     "u": [
+      "1666"
+     ]
+    },
+    {
+     "q": "On what contentious issue do Miffers and Tiffers disagree?",
+     "a": "Milk first or tea first when making a cup of tea",
+     "u": [
+      "tea"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Second half",
+   "questions": [
+    {
+     "n": 31,
+     "q": "HMP Frankland is a Category A men’s prison in the village of Brasside – in which English county?",
+     "a": "County Durham",
+     "u": [
+      "Durham"
+     ]
+    },
+    {
+     "n": 32,
+     "q": "Which politician became the UK Liberal Party leader in 1956?",
+     "a": "Jo Grimond",
+     "u": [
+      "Grimond"
+     ]
+    },
+    {
+     "n": 33,
+     "q": "The 2026 Martin McDonagh film Wild Horse Nine is set on which Pacific Island?",
+     "a": "Easter Island [accept Rapa Nui]",
+     "u": [
+      "Easter Island",
+      "Rapa Nui"
+     ]
+    },
+    {
+     "n": 34,
+     "q": "Which country has appeared the most often (18 times) in the Men’s Football World Cup Finals tournament without ever lifting the trophy?",
+     "a": "Mexico",
+     "u": [
+      "Mexico"
+     ]
+    },
+    {
+     "n": 35,
+     "q": "According to official figures, what was the bloodiest battle of the American Civil War?",
+     "a": "Gettysburg (over 50,000)",
+     "u": [
+      "Gettysburg"
+     ]
+    },
+    {
+     "n": 36,
+     "q": "If you were in Australia and swam in the sea at Glenelg, you would be in a suburb of which city?",
+     "a": "Adelaide",
+     "u": [
+      "Adelaide"
+     ]
+    },
+    {
+     "n": 37,
+     "q": "A verb form functioning as a noun in a sentence – such as “Swimming is good exercise” – is known by what term?",
+     "a": "A gerund",
+     "u": [
+      "gerund"
+     ]
+    },
+    {
+     "n": 38,
+     "q": "Who is the subject of the 2026 documentary You Can See Everything (both names)?",
+     "a": "Elizabeth Holmes",
+     "u": [
+      "Elizabeth Holmes"
+     ]
+    },
+    {
+     "n": 39,
+     "q": "Which British company, manufacturer of the Islander and Trislander and based on the Isle of Wight, is the sole remaining independent commercial aircraft producer in the United Kingdom?",
+     "a": "Britten-Norman",
+     "u": [
+      "Britten-Norman"
+     ]
+    },
+    {
+     "n": 40,
+     "q": "In which English cathedral is the tomb of King John?",
+     "a": "Worcester",
+     "u": [
+      "Worcester"
+     ]
+    },
+    {
+     "n": 41,
+     "q": "Mother Grundy's Parlour, Robin Hood Cave, The Pin Hole and Church Hole are four caves on the Derbyshire/Nottinghamshire border that were occupied by prehistoric man and in 2003 produced the first cave art ever discovered in Britain. What is the name of the valley they occupy?",
+     "a": "Creswell Crags",
+     "u": [
+      "Creswell Crags"
+     ]
+    },
+    {
+     "n": 42,
+     "q": "Which single, remixed by Fatboy Slim, topped the UK charts in 1998 and was described by the BBC as marking “a point where two types of popular culture were finally brought together in the UK charts: namely, Indie rock and Bollywood film.”",
+     "a": "Brimful of Asha by Cornershop",
+     "u": [
+      "Brimful of Asha"
+     ]
+    },
+    {
+     "n": 43,
+     "q": "Who won the chance to play Maria in Andrew Lloyd Webber's revival of The Sound of Music by winning the reality show How Do You Solve a Problem Like Maria? (both names)?",
+     "a": "Connie Fisher",
+     "u": [
+      "Connie Fisher"
+     ]
+    },
+    {
+     "n": 44,
+     "q": "Why is Dundee sometimes nicknamed the ‘City of Discovery’?",
+     "a": "Robert Falcon Scott’s ship the RSS Discovery was built there [accept any explanation that mentions Scott or the ship]"
+    },
+    {
+     "n": 45,
+     "q": "According to Bryan Adams’ song Summer of ’69, where did he buy his first real six-string?",
+     "a": "At the five and dime",
+     "u": [
+      "five and dime"
+     ]
+    },
+    {
+     "n": 46,
+     "q": "In which country was Cliff Richard born?",
+     "a": "India",
+     "u": [
+      "India"
+     ]
+    },
+    {
+     "n": 47,
+     "q": "What is the five-letter Romani word for a traditional horse-drawn “gypsy” caravan?",
+     "a": "Vardo",
+     "u": [
+      "Vardo"
+     ]
+    },
+    {
+     "n": 48,
+     "q": "Which Staffordshire village hosts an annual Horn Dance dating back at least to 1686?",
+     "a": "Abbot’s Bromley",
+     "u": [
+      "Abbot’s Bromley"
+     ]
+    },
+    {
+     "n": 49,
+     "q": "In which decade did the Ordnance Survey erect its first triangulation pillar or trig point?",
+     "a": "1930s (1936)",
+     "u": [
+      "1930s"
+     ]
+    },
+    {
+     "n": 50,
+     "q": "What is the four-word name of the conspiracist movement who subscribe to a pseudolegal belief that they are bound by laws (including the payment of taxes) only if they consent to those laws?",
+     "a": "Freemen of the land",
+     "u": [
+      "Freemen of the land"
+     ]
+    },
+    {
+     "n": 51,
+     "q": "Which local long-distance path runs from Disley to Kidsgrove?",
+     "a": "Gritstone Trail",
+     "u": [
+      "Gritstone"
+     ]
+    },
+    {
+     "n": 52,
+     "q": "In which year was Adolf Hitler born (2 years leeway)?",
+     "a": "1887–1891 (1889)",
+     "u": [
+      "1887–1891"
+     ]
+    },
+    {
+     "n": 53,
+     "q": "Which sportswear brand is also the 10th letter of the Greek alphabet?",
+     "a": "Kappa",
+     "u": [
+      "Kappa"
+     ]
+    },
+    {
+     "n": 54,
+     "q": "Who played Arnold Schwarzenegger's twin brother in the film Twins?",
+     "a": "Danny De Vito",
+     "u": [
+      "De Vito"
+     ]
+    },
+    {
+     "n": 55,
+     "q": "Who was the last Secretary of State for Health in the Brown government?",
+     "a": "Andy Burnham",
+     "u": [
+      "Burnham"
+     ]
+    },
+    {
+     "n": 56,
+     "q": "Which queen was the wife of Ethelred the Unready and King Cnut, and the mother of Harthacnut and Edward the Confessor?",
+     "a": "Emma of Normandy [accept Aelfgifu]",
+     "u": [
+      "Emma",
+      "Aelfgifu"
+     ]
+    },
+    {
+     "n": 57,
+     "q": "What is the common English name of the animal known as Mariquita in Spanish, Coccinelle in French and Marienkäfer in German?",
+     "a": "Ladybird",
+     "u": [
+      "Ladybird"
+     ]
+    },
+    {
+     "n": 58,
+     "q": "Which diamond, previously known as the French Blue and believed to carry a curse, was worn by Marie Antoinette and is now on display in the Smithsonian?",
+     "a": "The Hope Diamond",
+     "u": [
+      "Hope"
+     ]
+    },
+    {
+     "n": 59,
+     "q": "What are the Royal Marsden in Sutton, the Great Western in Swindon and the Lister in Stevenage?",
+     "a": "Hospitals",
+     "u": [
+      "Hospitals"
+     ]
+    },
+    {
+     "n": 60,
+     "q": "The 2015 Stephen Frears film The Program is about doping in which sport?",
+     "a": "Cycling",
+     "u": [
+      "Cycling"
+     ]
+    }
+   ],
+   "spares": [
+    {
+     "q": "Which component of blood pressure is recorded in the top number of a blood pressure reading?",
+     "a": "Systolic [accept systole or verbal description e.g. “the pressure in the arteries when the heart beats” or similar]",
+     "u": [
+      "Systolic",
+      "systole"
+     ]
+    },
+    {
+     "q": "What is the only remaining Scottish line regiment of the British Army infantry?",
+     "a": "The Royal Regiment of Scotland",
+     "u": [
+      "Royal Regiment of Scotland"
+     ]
+    },
+    {
+     "q": "Assuming only one conundrum with no tie-breaks, what is the maximum theoretical score in an episode of Countdown?",
+     "a": "230 [10 × nine-letter words (180) + 4 × perfect number rounds (40) + conundrum (10)]",
+     "u": [
+      "230"
+     ]
+    }
+   ]
+  }
+ ],
+ "spares": []
+}
